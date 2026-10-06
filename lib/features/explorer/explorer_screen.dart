@@ -5,6 +5,7 @@ import 'package:pecule/app/theme/pecule_spacing.dart';
 import 'package:pecule/app/widgets/toast.dart';
 import 'package:pecule/data/catalogue.dart';
 import 'package:pecule/domain/models/asset.dart';
+import 'package:pecule/features/asset_detail/asset_detail_screen.dart';
 import 'package:pecule/features/explorer/explorer_query.dart';
 import 'package:pecule/features/explorer/widgets/asset_row.dart';
 import 'package:pecule/features/explorer/widgets/explorer_empty_states.dart';
@@ -96,6 +97,9 @@ class _ExplorerScreenState extends ConsumerState<ExplorerScreen> {
                 asset: asset,
                 isFavorite: favoriteIds.contains(asset.id),
                 onFavoritePressed: () => _toggleFavorite(asset),
+                onTap: () =>
+                    Navigator.of(context)
+                        .push(AssetDetailScreen.route(asset.id)),
               ),
         ],
       ),

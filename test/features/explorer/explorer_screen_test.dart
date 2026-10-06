@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pecule/domain/models/currency.dart';
 import 'package:pecule/domain/models/fx_rate.dart';
 import 'package:pecule/domain/models/price_bar.dart';
+import 'package:pecule/features/asset_detail/asset_detail_screen.dart';
 import 'package:pecule/features/explorer/explorer_query.dart';
 import 'package:pecule/features/explorer/explorer_screen.dart';
 import 'package:pecule/features/explorer/widgets/filter_chips.dart';
@@ -91,6 +92,17 @@ void main() {
     await tester.pump();
 
     expect(find.text('Pas encore de favori'), findsOneWidget);
+  });
+
+  testWidgets('ouvre la fiche d\'un actif au toucher de sa ligne', (
+    tester,
+  ) async {
+    await pumpExplorer(tester);
+
+    await tester.tap(find.text('Apple'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AssetDetailScreen), findsOneWidget);
   });
 
   testWidgets('ajoute un favori au toucher du cœur et le confirme', (

@@ -33,10 +33,21 @@ String formatPercentWithArrow(double ratio) {
   return '$arrow $percent';
 }
 
+/// Ordre de grandeur sans signe, pour les phrases : « environ 22 % ».
+String formatRoundPercent(double ratio) =>
+    '${_digits((ratio * 100).abs().roundToDouble(), '#,##0')}$_unitSpace%';
+
+/// Écart entre deux performances, en points, sans signe : « 5,4 ».
+String formatPoints(double ratioDifference) =>
+    _digits((ratioDifference * 100).abs(), '#,##0.#');
+
 String formatQuantity(double quantity, {required String symbol}) =>
     '${_digits(quantity, '#,##0.####')}$_unitSpace$symbol';
 
 String formatRate(double rate) => _digits(rate, '0.0000');
+
+/// Valeur d'un euro en dollars, pour les phrases : « 1,05 $ ».
+String formatUsdPerEuro(double rate) => '${_digits(rate, '0.00')}$_unitSpace\$';
 
 /// [day] : jour de cotation à minuit UTC, affiché tel quel.
 String formatDay(DateTime day) => DateFormat('d MMM y', _locale).format(day);

@@ -42,4 +42,7 @@ enum UnavailableReason {
   notEnoughPrices,
   startInFuture,
   noPriceAfterStart,
+
+  /// L'effet de change n'a pas de sens pour un actif coté en euros.
+  sameCurrency,
 }

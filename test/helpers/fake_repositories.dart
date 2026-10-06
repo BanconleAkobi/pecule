@@ -19,9 +19,15 @@ import 'fixed_clock.dart';
 final testNow = DateTime.utc(2026, 10, 7, 23);
 
 class FakePriceHistoryRepository implements PriceHistoryRepository {
-  FakePriceHistoryRepository([this.barsByAssetId = const {}]);
+  FakePriceHistoryRepository([
+    this.barsByAssetId = const {},
+    this.refreshError,
+  ]);
 
   final Map<String, List<PriceBar>> barsByAssetId;
+
+  /// Erreur de la dernière actualisation, pour simuler le hors connexion.
+  final Object? refreshError;
 
   @override
   Stream<CachedData<List<PriceBar>>> watchHistory(
@@ -32,7 +38,8 @@ class FakePriceHistoryRepository implements PriceHistoryRepository {
     return Stream.value(
       CachedData(
         value: barsByAssetId[asset.id] ?? const [],
-        updatedAt: testNow,
+        updatedAt: refreshError == null ? testNow : null,
+        refreshError: refreshError,
       ),
     );
   }

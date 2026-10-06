@@ -86,6 +86,18 @@ void main() {
     test('affiche un taux de change avec quatre décimales', () {
       expect(formatRate(1.1), '1,1000');
     });
+
+    test('affiche la valeur d\'un euro en dollars pour une phrase', () {
+      expect(formatUsdPerEuro(1.0952), '1,10$unit\$');
+    });
+
+    test('arrondit un pourcentage sans signe pour une phrase', () {
+      expect(formatRoundPercent(-0.2149), '21$unit%');
+    });
+
+    test('affiche un écart de performance en points, sans signe', () {
+      expect(formatPoints(-0.0536), '5,4');
+    });
   });
 
   group('dates', () {

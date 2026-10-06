@@ -30,6 +30,8 @@ Computed<CurrencyEffect> computeCurrencyEffect({
     CurrencyEffect(
       performanceUsd: performanceUsd,
       performanceEur: performanceEur,
+      rateAtStart: rateAtStart,
+      rateAtEnd: rateAtEnd,
     ),
   );
 }
