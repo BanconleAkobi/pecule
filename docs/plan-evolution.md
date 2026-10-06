@@ -26,7 +26,8 @@ On coche au fil de l'eau. Chaque sprint se termine par un commit propre et une l
 
 - [x] Ajouter l'énoncé du module dans `Externesfiles/`.
 - [x] Créer les comptes Twelve Data et CoinGecko Demo, clés dans `env.json`.
-- [ ] Compléter l'environnement avant S2 : `cmdline-tools` Android, `flutter doctor --android-licenses`, CocoaPods.
+- [x] Compléter l'environnement : `cmdline-tools` Android, CocoaPods. `flutter doctor` sans problème.
+- [ ] Avant la recette : activer le mode développeur sur l'iPhone et le brancher une première fois en câble.
 
 ## Décisions
 
@@ -218,7 +219,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 - [x] Tirer pour actualiser : ignore les six heures, reste incrémental (`forceRefresh`).
 - [x] Cryptos : seule la journée en cours est réécrite (le dernier jour reçu est redemandé).
 - [x] Vider le cache : les trois tables de cache, rien d'autre (`clearCache`).
-- [ ] Repositories utilisateur : favoris, transactions, profil, leçons vues, simulations, préférences.
+- [x] Repositories utilisateur : favoris, achats, profil, leçons vues, simulations. Celui des préférences attend qu'une préférence soit définie.
 - [x] Journal de débogage des jours téléchargés (`dart:developer`, nom `pecule.cache`).
 - [ ] Détection hors connexion.
 - [ ] Providers des repositories et de l'horloge.
