@@ -188,7 +188,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 ### Base
 
 - [x] Schéma complet des 9 tables dans `data/local/database_schema.dart`, version 1. Jours en texte, horodatages en millisecondes UTC.
-- [x] Données utilisateur (tables créées, DAO à venir) :
+- [x] Données utilisateur, avec leurs DAO (favoris, achats, simulations, profil, leçons vues, préférences) :
   - `user_profile` (id, level, quiz_mistakes, onboarding_done, created_at)
   - `lesson_progress` (lesson_id, seen_at)
   - `favorite` (asset_id, added_at)
@@ -199,7 +199,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
   - `price_bar` (asset_id, day, open, high, low, close, volume, market_cap), clé (asset_id, day). Ouverture, plus haut et plus bas facultatifs : CoinGecko ne les fournit pas.
   - `fx_rate` (day, base, quote, rate), clé (day, base, quote)
   - `sync_state` (resource_key, last_data_day, last_fetched_at)
-- [ ] DAO des données utilisateur.
+- [x] DAO des données utilisateur. `quiz_mistakes` stocké en JSON (liste des leçons liées aux erreurs).
 - [ ] DAO appelés uniquement par les repositories.
 
 ### Repositories et cache (section 7)
