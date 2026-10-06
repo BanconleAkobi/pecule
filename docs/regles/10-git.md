@@ -12,6 +12,7 @@ F-FIC-02: compute stability score from volatility and drawdown
 
 - Le corps du message, s'il existe, explique pourquoi. Le quoi se lit dans le diff.
 - Pas de commit ni de push sans que je l'aie demandé.
+- Jamais de ligne `Co-Authored-By` ni de mention d'un outil d'IA dans un commit ou une PR.
 
 ## Ne jamais commiter
 
