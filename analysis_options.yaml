@@ -19,7 +19,6 @@ linter:
     - always_declare_return_types
     - always_use_package_imports
     - avoid_dynamic_calls
-    - avoid_redundant_argument_values
     - avoid_void_async
     - cancel_subscriptions
     - close_sinks

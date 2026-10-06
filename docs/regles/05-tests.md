@@ -1,10 +1,10 @@
 # Tests
 
-## TDD
+## Code et tests ensemble
 
-Rouge, vert, refactor : un test qui échoue pour la bonne raison, le code minimal qui le fait passer, puis un nettoyage sans changer le comportement.
+Chaque morceau de code arrive avec ses tests, écrits dans la même étape et lancés ensemble. Le domaine de S1 a été écrit en TDD strict (rouge, vert, refactor) ; depuis S2, on écrit le code puis ses tests directement, pour ne lancer les commandes qu'une fois par étape.
 
-- Aucune logique métier sans un test qui a d'abord échoué.
+- Aucune logique métier sans test.
 - Un bug se corrige en deux temps : un test qui le reproduit, puis la correction.
 - On ne désactive jamais un test, on ne l'affaiblit jamais pour faire passer la suite.
 - Avant d'écrire un client API, un test d'apprentissage sur une vraie réponse JSON enregistrée dans `test/fixtures/`.

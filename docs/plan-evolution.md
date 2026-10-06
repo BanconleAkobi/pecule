@@ -167,19 +167,21 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ### Vérifications préalables (section 5.1)
 
-- [ ] Twelve Data : quota du plan gratuit (8 par minute, 800 par jour), couverture, cours ajustés ou bruts, endpoint `time_series` en `1day` avec `start_date`.
-- [ ] CoinGecko Demo : clé en en-tête, `market_chart/range` en `usd`, profondeur d'historique. Si elle est limitée à un an, borner le simulateur crypto et l'expliquer dans l'interface.
-- [ ] Frankfurter : URL exacte, série temporelle en base EUR, absence de taux les week-ends et jours fériés.
+- [x] Twelve Data : 8 crédits par minute et 800 par jour, actions et ETF américains inclus, 1 crédit par `time_series`. Cours ajustés des divisions par défaut (`adjust=splits`), pas des dividendes : à écrire dans le rapport (annexe A.5). Prix en texte. `end_date` est exclue de la réponse. Sans cours sur la période, l'API répond par une erreur 400 « No data is available », traduite en liste vide.
+- [x] CoinGecko Demo : clé en en-tête `x-cg-demo-api-key`. **Historique limité aux 365 derniers jours** : le simulateur crypto sera borné et l'écran l'expliquera. `interval=daily` accepté, un point à minuit UTC. `coins/markets` donne cours actuel et variation sur un an en un appel.
+- [x] Frankfurter : `https://api.frankfurter.dev/v2/rates`, base EUR, sans clé ni quota. Une date de début seule renvoie tout jusqu'au dernier taux. **Des taux existent aussi le week-end** ; la recherche de la dernière valeur connue reste utile pour les jours fériés.
 - [x] Trancher la question des cours de l'Explorer : remplissage progressif par la file d'attente (voir Décisions).
 
 ### Clients
 
 - [ ] Horloge injectable dans `core/`, fournie aux repositories.
 - [ ] Lecture des clés API par `String.fromEnvironment`, lancement avec `--dart-define-from-file=env.json`.
-- [ ] Une vraie réponse par endpoint dans `test/fixtures/` et un test d'apprentissage pour chacune.
-- [ ] `TwelveDataClient`, `CoinGeckoClient`, `FrankfurterClient` : requête, statut, parsing en DTO.
-- [ ] DTO et `fromJson` testés, conversion des DTO en modèles du domaine.
-- [ ] Exceptions typées : `NetworkException`, `RateLimitException`, `MissingPriceException`.
+- [x] Une vraie réponse par endpoint dans `test/fixtures/` et un test d'apprentissage pour chacune. Enregistrées par `tool/fetch_fixtures.sh`.
+- [x] `TwelveDataClient`, `CoinGeckoClient`, `FrankfurterClient` : requête, statut, parsing en DTO. Requête commune dans `data/remote/http_json.dart`.
+- [x] DTO et `fromJson` testés.
+- [ ] Conversion des DTO en modèles du domaine (dans les repositories).
+- [x] Exceptions typées des API : `NetworkException`, `RateLimitException`, `ApiErrorException`, `UnexpectedResponseException`.
+- [ ] `MissingPriceException`, avec les repositories.
 - [ ] File d'attente unique pour Twelve Data, au débit autorisé. Une erreur de quota devient un message clair.
 - [ ] Catalogue de 30 instruments en constante (section 5.2) : identifiant, nom, symbole, symbole d'affichage, type, fournisseur, devise.
 

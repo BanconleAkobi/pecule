@@ -19,6 +19,7 @@ On réfléchit d'abord, on code ensuite. Un changement qu'on ne sait pas expliqu
 
 ## Ce qui demande mon accord
 
+- Lancer une commande (tests, analyse, git, appels réseau, flutter). On annonce ce qu'elle fait et pourquoi, on regroupe les commandes liées, et on attend mon accord.
 - Ajouter une dépendance. Elle doit aussi être ajoutée au tableau 11.4 du cahier des charges avec sa raison.
 - Ajouter une couche, un patron de conception ou une abstraction « pour plus tard ».
 - Modifier le schéma de la base.
