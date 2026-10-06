@@ -8,61 +8,60 @@ On coche au fil de l'eau. Chaque sprint se termine par un commit propre et une l
 
 **Règle de pilotage.** Si un sprint dépasse son budget de plus de 30 %, on retire d'abord une fonctionnalité Bonus, puis une Importante, jamais une Indispensable.
 
-| Sprint | Contenu | Heures | Dates |
-| --- | --- | --- | --- |
-| S0 | Fondations | 4 | à remplir |
-| S1 | Domaine | 8 | à remplir |
-| S2 | Données | 12 | à remplir |
-| S3 | Explorer et fiche actif | 10 | à remplir |
-| S4 | Portefeuille | 8 | à remplir |
-| S5 | Simulateur | 6 | à remplir |
-| S6 | Onboarding et Apprendre | 5 | à remplir |
-| S7 | Animations et finitions | 5 | à remplir |
-| S8 | Recette | 2 | à remplir |
+| Sprint | Contenu | Heures |
+| --- | --- | --- |
+| S0 | Fondations | 4 |
+| S1 | Domaine | 8 |
+| S2 | Données | 12 |
+| S3 | Explorer et fiche actif | 10 |
+| S4 | Portefeuille | 8 |
+| S5 | Simulateur | 6 |
+| S6 | Onboarding et Apprendre | 5 |
+| S7 | Animations et finitions | 5 |
+| S8 | Recette | 2 |
 
 ---
 
 ## Avant de commencer
 
-- [ ] Ajouter l'énoncé du module dans `Externesfiles/`. Le cahier y renvoie (section 11 de l'énoncé, annexes A.2 et A.5) mais il n'est pas dans le projet.
-- [ ] Créer les comptes Twelve Data et CoinGecko Demo, récupérer les clés.
-- [ ] Remplir les dates des sprints selon l'alternance école et entreprise.
-- [ ] Trancher les points des deux tableaux ci-dessous qui bloquent S0.
+- [x] Ajouter l'énoncé du module dans `Externesfiles/`.
+- [x] Créer les comptes Twelve Data et CoinGecko Demo, clés dans `env.json`.
+- [ ] Compléter l'environnement avant S2 : `cmdline-tools` Android, `flutter doctor --android-licenses`, CocoaPods.
 
-## Décisions ouvertes
+## Décisions
 
-| Décision | Options | À trancher avant | Source |
+| Décision | Choix | Pourquoi | Source |
 | --- | --- | --- | --- |
-| Accès à la base | drift (requêtes vérifiées, base en mémoire dans les tests, génération de code) ou sqflite (SQL à la main, plus léger) | S2 | §6.1 |
-| ~~Navigation~~ | Tranché le 06/10 : Navigator natif | S0 | §11.4 |
-| ~~Polices~~ | Tranché le 06/10 : fichiers embarqués | S0 | Maquette |
-| ~~Plateformes~~ | Tranché le 06/10 : on garde tout | S0 | §15 |
-| Résultat indisponible | Forme exacte (classe scellée proposée dans `04-erreurs.md`) | S1 | §8.1 |
-| Cours de l'Explorer | Comment afficher le dernier cours et la variation des 20 actions et ETF sans casser le quota de 8 crédits par minute : cache seulement, remplissage progressif par la file d'attente, ou endpoint groupé à vérifier | S2 | §4.3 et §5.3 |
-| Détection hors connexion | Déduite des échecs réseau, ou paquet connectivity_plus (absent du tableau §11.4) | S2 | §7.4 |
-| Anneau de répartition | fl_chart ou CustomPainter | S4 | §10 |
-| Double courbe du simulateur | fl_chart ou CustomPainter | S5 | §11.4 |
+| Navigation | Navigator natif et `IndexedStack` | Aucune dépendance, pas besoin de liens profonds | section 11.4 |
+| Polices | Fichiers embarqués | Hors connexion dès le premier lancement | Maquette |
+| Plateformes | On garde tout | Choix personnel, exclues de l'analyse | section 15 |
+| Résultat indisponible | Type générique `Computed<T>` : `Available` ou `Unavailable` avec une raison | Un seul motif pour tous les calculs, `switch` exhaustif à l'écran | section 8.1 |
+| Accès à la base | sqflite | Vu en cours, SQL écrit à la main donc entièrement maîtrisé, aucune génération de code. Les repositories sont testés sur une base en mémoire avec `sqflite_common_ffi` | section 6.1 |
+| Cours de l'Explorer | Cache d'abord, puis remplissage progressif des historiques par la file d'attente Twelve Data, la fiche ouverte passant en priorité. Cryptos en un seul appel CoinGecko | Chaque historique n'est téléchargé qu'une fois puis complété au jour le jour, ce que demande l'énoncé (section 5). Premier remplissage d'environ 3 minutes, puis 20 crédits par jour sur 800 | section 4.3, section 5.3 |
+| Détection hors connexion | Déduite des échecs réseau | Aucune dépendance. Un paquet de connectivité dit seulement si une interface est active, pas si l'API répond : il faudrait gérer les échecs de toute façon | section 7.4 |
+| Anneau de répartition | À trancher en S4 : fl_chart ou CustomPainter | | section 10 |
+| Double courbe du simulateur | À trancher en S5 : fl_chart ou CustomPainter | | section 11.4 |
 
 ## Écarts entre la maquette et le cahier
 
 | Sujet | Cahier | Maquette | Proposition |
 | --- | --- | --- | --- |
-| Charte graphique | Violet `#8B7CFF`, Inter | Pollen `#E2F24B`, Instrument Serif, Schibsted Grotesk, JetBrains Mono | Maquette (validé). Mettre à jour §13.1 |
-| Barre d'onglets | Icônes fines (prompt §13) | Libellés texte seuls, trait pollen sur l'onglet actif | Maquette |
+| Charte graphique | Violet `#8B7CFF`, Inter | Pollen `#E2F24B`, Instrument Serif, Schibsted Grotesk, JetBrains Mono | Maquette (validé). Mettre à jour section 13.1 |
+| Barre d'onglets | Icônes fines (prompt section 13) | Libellés texte seuls, trait pollen sur l'onglet actif | Maquette |
 | Réglages | Point d'entrée non précisé | Bouton « Réglages » en haut de Patrimoine, feuille du bas | Maquette |
 | Variation dans l'Explorer | « Sur la période choisie », sans sélecteur de période prévu | Toujours sur 1 an | Maquette : 1 an |
-| Date de début du simulateur | Date libre, validée | Liste de janvier 2022 à janvier 2026 | À trancher |
-| Actifs du simulateur | Tout le catalogue | Six actifs en puces (Bitcoin, S&P 500, Apple, Ethereum, Nasdaq 100, Tesla) | À trancher |
-| Feuille « En clair » | Absente | Chiffres soulignés en pointillés qui s'ouvrent en phrase simple | La garder, rattachée à F-FIC-04 et à la promesse §1.4 |
+| Date de début du simulateur | Date libre, validée | Liste de janvier 2022 à janvier 2026 | Cahier : sélecteur de date dans le champ de la maquette. La validation de la date fait partie du formulaire évalué |
+| Actifs du simulateur | Tout le catalogue | Six actifs en puces (Bitcoin, S&P 500, Apple, Ethereum, Nasdaq 100, Tesla) | Les 30 actifs en puces défilantes, comme la maquette : favoris d'abord, puis les six de la maquette, puis le reste |
+| Feuille « En clair » | Absente | Chiffres soulignés en pointillés qui s'ouvrent en phrase simple | La garder, rattachée à F-FIC-04 et à la promesse section 1.4 |
 | Onboarding, écran de fin | Niveau et explication | En plus : trois leçons « À lire en premier » avec leur durée | Maquette |
-| Réinitialiser le portefeuille | Non détaillé | Aucune confirmation avant suppression | À trancher : action destructive |
-| Catalogue | 30 instruments, cryptos identifiées par leur id CoinGecko | 14 actifs de démonstration, cryptos affichées par symbole (BTC, ETH) | Cahier pour la liste. Ajouter un symbole d'affichage aux cryptos |
+| Réinitialiser le portefeuille | Non détaillé | Aucune confirmation avant suppression | Une confirmation : l'action est irréversible |
+| Catalogue | 30 instruments, cryptos identifiées par leur id CoinGecko | 14 actifs de démonstration, cryptos affichées par symbole (BTC, ETH) | Cahier pour la liste. L'id CoinGecko reste interne, on affiche le symbole (BTC) |
 
 ## Incohérences internes au cahier
 
-- §2 renvoie à « l'explicabilité du score (section 8.4) ». Le score est en §8.5, le §8.4 traite de l'effet de change.
-- §12.9 indique « drift (SQLite) » dans la stack, alors que §6.1 laisse le choix ouvert.
-- §1.5 (version .docx seulement) : le nom « Semis » est encore présent dans la proposition. À harmoniser en « Pécule » dans le rapport.
+- La section 2 renvoie à « l'explicabilité du score (section 8.4) ». Le score est en section 8.5, la section 8.4 traite de l'effet de change.
+- La section 12.9 indique « drift (SQLite) » dans la stack, alors que la section 6.1 laisse le choix ouvert. Tranché : sqflite, à corriger dans le rapport.
+- Section 1.5 (version .docx seulement) : le nom « Semis » est encore présent dans la proposition. À harmoniser en « Pécule » dans le rapport.
 
 ---
 
@@ -71,7 +70,7 @@ On coche au fil de l'eau. Chaque sprint se termine par un commit propre et une l
 - [x] Initialiser le dépôt git (le dossier n'en est pas un) et compléter `.gitignore` : `env.json`, `.claude/`.
 - [x] Nettoyer le projet généré : `lib/main.dart` (compteur et commentaires du modèle), `test/widget_test.dart`, description de `pubspec.yaml`, `README.md`.
 - [x] Lints stricts dans `analysis_options.yaml` (`strict-casts`, `strict-inference`, `strict-raw-types` et règles complémentaires).
-- [x] Arborescence de §11.2 : `app/` et `features/` pour l'instant. `core/`, `domain/` et `data/` sont créés avec leur premier fichier (S1, S2).
+- [x] Arborescence de section 11.2 : `app/` et `features/` pour l'instant. `core/`, `domain/` et `data/` sont créés avec leur premier fichier (S1, S2).
 - [x] Dépendances : `flutter_localizations` seulement, `cupertino_icons` retiré. Riverpod, intl, http et mocktail arrivent au sprint qui les utilise.
 - [x] Polices embarquées dans `assets/fonts/`, licences OFL enregistrées.
 - [x] Thème sombre selon `docs/regles/09-interface.md` : couleurs, extension `PeculeColors`, typographie. Les thèmes de composants (boutons, champs, puces) arrivent avec leur premier usage.
@@ -89,26 +88,27 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ### Socle
 
-- [ ] Horloge injectable dans `core/`.
 - [ ] Formateurs dans `core/`, testés : montant (2 décimales, 3 sous 1 €, arrondi à l'euro pour la simulation), pourcentage signé avec `−` et flèche, quantité (4 décimales et symbole), taux (4 décimales), dates (`4 oct. 2026`, `Mis à jour le 4 oct. à 18:02`, `Cours du vendredi 3 janvier utilisé`).
-- [ ] Type « résultat indisponible ».
+- [x] Type « résultat indisponible » : `Computed<T>` dans `lib/domain/computed.dart`.
+- L'horloge injectable passe en S2 : les calculs reçoivent la date du jour en paramètre, seuls les repositories en ont besoin.
 
 ### Modèles immuables
 
-- [ ] `Asset` : identifiant, nom, symbole, symbole d'affichage, type, fournisseur, devise.
-- [ ] `AssetType` : action, ETF, crypto.
-- [ ] `PriceBar` : jour, ouverture, plus haut, plus bas, clôture, volume, capitalisation (cryptos).
-- [ ] `FxRate` : jour, base, devise cotée, taux.
-- [ ] `PaperTransaction` : actif, date d'exécution, montant en euros, cours unitaire, devise du cours, taux EUR/USD, quantité.
+- [x] `Asset` : identifiant, nom, symbole affiché, type, devise. Le fournisseur reste dans le catalogue de `data/`, pour que le domaine ignore les API.
+- [x] `AssetType` : action, ETF, crypto, avec les jours de cotation par an.
+- [x] `Currency` : EUR, USD.
+- [x] `PriceBar` : jour, ouverture, plus haut, plus bas, clôture, volume, capitalisation (cryptos).
+- [x] `FxRate` : jour, base, devise cotée, taux.
+- [x] `PaperTransaction` : actif, date d'exécution, montant en euros, cours unitaire, devise du cours, taux EUR/USD, quantité.
 - [ ] Paramètres et résultat de simulation.
 - [ ] Niveau utilisateur : Découverte, Initié, À l'aise.
 
-### Conventions (§8.1)
+### Conventions (section 8.1)
 
-- [ ] Conversion : prix en euros = prix en dollars / r (r = dollars pour un euro).
-- [ ] Valeur au plus tard à une date : dernier cours ou dernier taux disponible avant cette date.
+- [x] Conversion : prix en euros = prix en dollars / r (r = dollars pour un euro). `calculations/currency.dart`.
+- [x] Valeur au plus tard à une date : dernier cours ou dernier taux disponible avant cette date. `calculations/dated_lookup.dart`.
 
-### Portefeuille (§8.2)
+### Portefeuille (section 8.2)
 
 | Calcul | Formule | Cas limites |
 | --- | --- | --- |
@@ -120,25 +120,27 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 | Répartition | valeur d'un type / valeur totale | Un seul type, somme des poids égale à 1 |
 | Concentration | alerte si une ligne pèse plus de 50 % | Exactement 50 %, une seule ligne |
 
-### Simulation DCA (§8.3)
+- [x] Tous les calculs du tableau et leurs cas limites, dans `calculations/portfolio.dart`. En plus : regroupement des achats par actif, taux de change nul, cours nul.
+
+### Simulation DCA (section 8.3)
 
 - [ ] Dates prévues entre le début et aujourd'hui selon la fréquence (semaine ou mois).
 - [ ] Pour chaque date : premier cours de clôture disponible à partir de cette date, converti au taux du jour, quantité = montant / cours en euros.
 - [ ] Sorties : capital investi (achats × montant), valeur finale (Σ quantités × cours final en euros), performance (valeur finale / capital − 1), prix moyen (capital / Σ quantités), série jour par jour (capital cumulé, valeur des quantités cumulées).
 - [ ] Cas limites : début dans le futur, aucun cours après le début, historique avec des trous, montant nul, une seule période, dernier achat tombant aujourd'hui.
 
-### Effet de change (§8.4)
+### Effet de change (section 8.4)
 
 - [ ] perf_eur = (1 + perf_usd) × r_début / r_fin − 1. L'effet de change est l'écart entre les deux, en points.
 - [ ] Test : +18 % en dollars, euro de 1,05 à 1,10, donne +12,6 % en euros.
 
-### Risque et score de stabilité (§8.5)
+### Risque et score de stabilité (section 8.5)
 
 | Indicateur | Définition | Cas limites |
 | --- | --- | --- |
 | Rendements quotidiens | r_t = cours_t / cours_(t−1) − 1 | Moins de deux cours |
 | Volatilité annualisée | écart-type des rendements × √N, N = 252 (actions, ETF) ou 365 (cryptos) | Moins de deux rendements, série constante |
-| Plus forte baisse | min(cours / plus haut précédent − 1) | Série croissante (0 %), exemple de l'annexe A.2 (−28 %) |
+| Plus forte baisse | min(cours / plus haut précédent − 1) | Série croissante (0 %), annexe A.2 : 100, 110, 125, 115, 90, 105 donnent −28 % |
 
 - [ ] Note de volatilité = 100 × (1 − min(volatilité, 0,80) / 0,80).
 - [ ] Note de baisse = 100 × (1 − min(|baisse|, 0,80) / 0,80).
@@ -146,11 +148,11 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 - [ ] Libellé : 0 à 39 Agité, 40 à 69 Modéré, 70 à 100 Stable.
 - [ ] Test : volatilité 20 % et baisse 25 % donnent 75 et 68,75, score 72, « Stable ».
 
-### Intérêts composés (§8.6)
+### Intérêts composés (section 8.6)
 
 - [ ] Capital final = capital × (1 + taux)^années. Test : 1 000 € à 5 % sur 10 ans donnent 1 628,89 €.
 
-### Niveau de l'onboarding (§4.2)
+### Niveau de l'onboarding (section 4.2)
 
 - [ ] Un point par bonne réponse. 0 à 1 Découverte, 2 à 3 Initié, 4 à 5 À l'aise. Questionnaire passé : Découverte.
 - [ ] Chaque erreur renvoie à sa leçon associée.
@@ -159,22 +161,23 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ## S2. Données (12 h)
 
-### Vérifications préalables (§5.1)
+### Vérifications préalables (section 5.1)
 
 - [ ] Twelve Data : quota du plan gratuit (8 par minute, 800 par jour), couverture, cours ajustés ou bruts, endpoint `time_series` en `1day` avec `start_date`.
 - [ ] CoinGecko Demo : clé en en-tête, `market_chart/range` en `usd`, profondeur d'historique. Si elle est limitée à un an, borner le simulateur crypto et l'expliquer dans l'interface.
 - [ ] Frankfurter : URL exacte, série temporelle en base EUR, absence de taux les week-ends et jours fériés.
-- [ ] Trancher la question des cours de l'Explorer (décisions ouvertes).
+- [x] Trancher la question des cours de l'Explorer : remplissage progressif par la file d'attente (voir Décisions).
 
 ### Clients
 
+- [ ] Horloge injectable dans `core/`, fournie aux repositories.
 - [ ] Lecture des clés API par `String.fromEnvironment`, lancement avec `--dart-define-from-file=env.json`.
 - [ ] Une vraie réponse par endpoint dans `test/fixtures/` et un test d'apprentissage pour chacune.
 - [ ] `TwelveDataClient`, `CoinGeckoClient`, `FrankfurterClient` : requête, statut, parsing en DTO.
 - [ ] DTO et `fromJson` testés, conversion des DTO en modèles du domaine.
 - [ ] Exceptions typées : `NetworkException`, `RateLimitException`, `MissingPriceException`.
 - [ ] File d'attente unique pour Twelve Data, au débit autorisé. Une erreur de quota devient un message clair.
-- [ ] Catalogue de 30 instruments en constante (§5.2) : identifiant, nom, symbole, symbole d'affichage, type, fournisseur, devise.
+- [ ] Catalogue de 30 instruments en constante (section 5.2) : identifiant, nom, symbole, symbole d'affichage, type, fournisseur, devise.
 
 ### Base
 
@@ -191,7 +194,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
   - `sync_state` (resource_key, last_data_day, last_fetched_at)
 - [ ] DAO, appelés uniquement par les repositories.
 
-### Repositories et cache (§7)
+### Repositories et cache (section 7)
 
 - [ ] `CachedData` : valeur, date de mise à jour, indication « peut-être ancienne ».
 - [ ] Dernier jour de cotation attendu, en fonction pure testée : veille ou jour même selon l'heure, week-ends sautés pour les actions et ETF, tous les jours pour les cryptos et le change.
@@ -228,7 +231,7 @@ F-EXP-01, F-EXP-02, F-EXP-03, F-FIC-01, F-FIC-02, F-FIC-03, F-FIC-04, F-FIC-05 (
 
 - [ ] État d'erreur avec « Réessayer », squelettes, toast, bandeau hors connexion, feuille « En clair », pastille d'actif, ligne de variation signée et fléchée.
 
-### Explorer (§4.3)
+### Explorer (section 4.3)
 
 - [ ] Titre, recherche « Nom ou symbole » filtrée à la frappe, bouton d'effacement.
 - [ ] Puces : Tous, Actions, ETF, Cryptos, ♥ Favoris.
@@ -238,7 +241,7 @@ F-EXP-01, F-EXP-02, F-EXP-03, F-FIC-01, F-FIC-02, F-FIC-03, F-FIC-04, F-FIC-05 (
 - [ ] États : squelettes, données, données anciennes avec date, « Aucun résultat » avec « Rien ne correspond à « … ». » et « Effacer la recherche », « Pas encore de favori ».
 - [ ] Acceptation : la recherche ne déclenche aucun appel réseau ; un favori ajouté apparaît tout de suite dans le filtre et survit à un redémarrage ; la liste reste utilisable hors connexion avec les derniers cours connus.
 
-### Fiche actif (§4.4)
+### Fiche actif (section 4.4)
 
 - [ ] En-tête : retour, « SYMBOLE · Type », cœur. Nom, cours en euros, variation sur la période (chiffre traduisible).
 - [ ] Courbe : périodes 1M, 6M, 1A (par défaut), 3A, Max. Lecture au doigt : trait vertical, point, bulle « date · cours ». L'en-tête affiche alors la variation entre le début de la période et ce point, avec « au 4 janv. 2026 ».
@@ -255,7 +258,7 @@ F-EXP-01, F-EXP-02, F-EXP-03, F-FIC-01, F-FIC-02, F-FIC-03, F-FIC-04, F-FIC-05 (
 
 F-ACH-01, F-FIC-05, F-PAT-01, F-PAT-02, F-PAT-03, F-PAT-04.
 
-### Achat fictif (§4.5)
+### Achat fictif (section 4.5)
 
 - [ ] Feuille « Achat fictif : Apple » avec « Fermer » : grand champ de montant, date d'achat.
 - [ ] Récapitulatif mis à jour à la saisie : cours à cette date, taux EUR/USD, quantité obtenue. Note si la date tombe un jour sans cotation.
@@ -275,7 +278,7 @@ F-ACH-01, F-FIC-05, F-PAT-01, F-PAT-02, F-PAT-03, F-PAT-04.
 - [ ] « Valider l'achat » grisé tant que le formulaire est invalide.
 - [ ] La transaction fige le cours et le taux utilisés. Toast « 150,00 € de Apple ajoutés ».
 
-### Patrimoine (§4.6)
+### Patrimoine (section 4.6)
 
 - [ ] En-tête : logo « pécule » et bouton « Réglages ».
 - [ ] « TON PATRIMOINE FICTIF », valeur totale, gain en euros et en pourcentage (chiffre traduisible), « Mis à jour le … · touche le chiffre pour le traduire ».
@@ -292,7 +295,7 @@ F-ACH-01, F-FIC-05, F-PAT-01, F-PAT-02, F-PAT-03, F-PAT-04.
 
 F-SIM-01, F-SIM-02, F-SIM-03. F-SIM-04 en bonus.
 
-### Formulaire (§4.7)
+### Formulaire (section 4.7)
 
 - [ ] « Et si j'avais investi… ? ».
 - [ ] Actif, montant à chaque fois, fréquence (« Chaque semaine », « Chaque mois »), date de début.
@@ -322,14 +325,14 @@ F-SIM-01, F-SIM-02, F-SIM-03. F-SIM-04 en bonus.
 
 F-ONB-01, F-ONB-02, F-APP-01, F-APP-02, F-APP-03, F-GEN-02. Le cahier ne place F-GEN-02 dans aucun sprint, elle va ici parce qu'elle dépend de l'onboarding.
 
-### Onboarding (§4.2)
+### Onboarding (section 4.2)
 
 - [ ] Accueil : logo, « Ton premier patrimoine, sans risque. », « Des cours réels, de l'argent fictif. Tu apprends en essayant. », « C'est parti », « Passer ».
 - [ ] Cinq questions à quatre réponses (textes de la maquette), barre de progression, retour, « QUESTION 2 SUR 5 », « Passer ». « Suivant » grisé tant que rien n'est choisi ; la dernière question affiche « Voir mon point de départ ».
 - [ ] Résultat : « TON POINT DE DÉPART », niveau, « 3 bonnes réponses sur 5 », « Ce n'est pas une note. Ça sert juste à choisir tes premières leçons. », trois leçons « À LIRE EN PREMIER », « Découvrir Pécule ».
 - [ ] Acceptation : apparaît une seule fois ; passé, il applique le niveau Découverte ; niveau et erreurs enregistrés en base ; peut être refait depuis les Réglages.
 
-### Leçons (§4.8)
+### Leçons (section 4.8)
 
 - [ ] Fichier JSON embarqué : huit leçons avec numéro, titre, niveau, durée, paragraphes, illustration et appel à l'action.
 
@@ -362,7 +365,7 @@ F-ONB-01, F-ONB-02, F-APP-01, F-APP-02, F-APP-03, F-GEN-02. Le cahier ne place F
 
 ## S7. Animations et finitions (5 h)
 
-### Animations codées (§10)
+### Animations codées (section 10)
 
 - [ ] Total du patrimoine qui compte jusqu'à sa valeur : `AnimationController` et `Tween<double>`, chiffres à chasse fixe.
 - [ ] Courbe qui se dessine de gauche à droite : `CustomPainter` et extraction progressive du tracé (`PathMetric`).
@@ -385,7 +388,7 @@ F-ONB-01, F-ONB-02, F-APP-01, F-APP-02, F-APP-03, F-GEN-02. Le cahier ne place F
 
 ## S8. Recette (2 h)
 
-Sur un vrai téléphone, application installée en mode release (§15).
+Sur un vrai téléphone, application installée en mode release (section 15).
 
 | Scénario | Résultat attendu | OK |
 | --- | --- | --- |
@@ -426,9 +429,9 @@ Sur un vrai téléphone, application installée en mode release (§15).
 | Trois animations dont deux codées | Quatre codées, plus des micro-animations | S7 |
 | Tests unitaires du métier | Toute la couche domain, cas limites compris | S1, puis chaque sprint |
 
-Évalués à part : l'architecture (§11), la stratégie de cache justifiée (§7), l'explicabilité du score (§8.5).
+Évalués à part : l'architecture (section 11), la stratégie de cache justifiée (section 7), l'explicabilité du score (section 8.5).
 
-## Risques et parades (§16)
+## Risques et parades (section 16)
 
 | Risque | Parade | Sprint |
 | --- | --- | --- |
@@ -439,7 +442,7 @@ Sur un vrai téléphone, application installée en mode release (§15).
 | Code généré mal compris | Relecture systématique, `CLAUDE.md`, petites demandes ciblées | Tous |
 | Fuite de clé API | Clés hors dépôt, fichier d'exemple, vérification avant chaque push | S0, tous |
 
-## Hors périmètre (§16.1)
+## Hors périmètre (section 16.1)
 
 Comptes utilisateurs et synchronisation, notifications, ventes fictives, frais de courtage simulés, actifs cotés en euros, mode clair, comparaison DCA contre investissement unique (F-SIM-04, sauf s'il reste du temps).
 
@@ -451,8 +454,8 @@ Comptes utilisateurs et synchronisation, notifications, ventes fictives, frais d
 
 - [ ] Repartir du cahier des charges et compléter avec ce qui a réellement été fait.
 - [ ] Choix techniques à partir du journal des décisions.
-- [ ] Stratégie de cache justifiée (§7) et explicabilité du score (§8.5).
-- [ ] Limites : clé embarquée extractible (§5.4), cours bruts éventuels (annexe A.5), bornes de l'historique crypto.
+- [ ] Stratégie de cache justifiée (section 7) et explicabilité du score (section 8.5).
+- [ ] Limites : clé embarquée extractible (section 5.4), cours bruts éventuels (annexe A.5), bornes de l'historique crypto.
 - [ ] Tests : ce qui est couvert, comment.
 - [ ] Difficultés rencontrées et améliorations possibles.
 - [ ] Harmoniser « Semis » en « Pécule ».
@@ -475,5 +478,5 @@ Comptes utilisateurs et synchronisation, notifications, ventes fictives, frais d
 ### Soutenance
 
 - [ ] Démonstration, cache préchauffé, scénario hors connexion répété.
-- [ ] Réponses prêtes aux questions de §11.3 : où est l'état, qui choisit entre cache et réseau, où sont les calculs, qui gère la persistance, comment remontent erreurs et chargements, ce qui se passe à la reconstruction d'un widget.
+- [ ] Réponses prêtes aux questions de section 11.3 : où est l'état, qui choisit entre cache et réseau, où sont les calculs, qui gère la persistance, comment remontent erreurs et chargements, ce qui se passe à la reconstruction d'un widget.
 - [ ] Savoir modifier le code en direct : rien dans le dépôt qu'on ne sache expliquer.

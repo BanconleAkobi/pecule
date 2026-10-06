@@ -11,7 +11,7 @@ presentation  →  application  →  data  →  domain
 
 | Couche | Contient | N'a pas le droit de |
 | --- | --- | --- |
-| `domain/` | Modèles immuables, calculs purs | Importer Flutter, Riverpod, drift ou http |
+| `domain/` | Modèles immuables, calculs purs | Importer Flutter, Riverpod, sqflite ou http |
 | `data/` | Clients API, DTO, base, repositories | Contenir de la logique d'affichage |
 | `application` (providers) | État de chaque écran, orchestration | Construire des widgets |
 | `presentation` (écrans, widgets) | Affichage, gestes | Appeler une API, lire la base, faire un calcul métier |
@@ -59,7 +59,8 @@ Un dossier n'est créé que lorsqu'il reçoit son premier fichier.
 | http | REST | Retenu |
 | intl | Formats français | Retenu |
 | mocktail | Doublures de test (dev) | Retenu |
-| drift + sqlite3_flutter_libs | SQLite typé | À valider avant S2 (alternative : sqflite) |
+| sqflite | SQLite, requêtes écrites à la main | Retenu, ajouté en S2 |
+| sqflite_common_ffi | Base en mémoire pour tester les repositories (dev) | Retenu, ajouté en S2 |
 | go_router | Navigation à onglets | Écarté : Navigator natif et `IndexedStack` |
 | flutter_localizations (SDK) | Textes Material en français | Retenu |
 | fl_chart | Anneau, double courbe | Optionnel |

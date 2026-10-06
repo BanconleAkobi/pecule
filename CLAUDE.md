@@ -3,12 +3,12 @@
 Application Flutter pour apprendre l'investissement avec un portefeuille fictif basé sur des cours réels. Aucune transaction réelle, aucun compte, tout reste sur le téléphone. Projet individuel, FISA 5, INSA Hauts-de-France, 2026-2027.
 
 - Référence fonctionnelle : `Externesfiles/Pecule_Cahier_des_charges.docx`
-- Référence visuelle et textes affichés : `Externesfiles/Pecule.dc.html` (maquette interactive, iPhone 390 × 844). Elle prime sur la charte §13.1 du cahier.
+- Référence visuelle et textes affichés : `Externesfiles/Pecule.dc.html` (maquette interactive, iPhone 390 × 844). Elle prime sur la charte section 13.1 du cahier.
 - Plan de travail : `docs/plan-evolution.md` (sprints, décisions ouvertes, écarts maquette et cahier)
 
 ## Contexte
 
-- Stack : Flutter (Dart), Riverpod, SQLite (drift ou sqflite, à trancher avant S2), http
+- Stack : Flutter (Dart), Riverpod, SQLite avec sqflite, http
 - Tests : `flutter test`
 - Analyse et format : `flutter analyze && dart format .`
 - Build : `flutter build apk --dart-define-from-file=env.json`

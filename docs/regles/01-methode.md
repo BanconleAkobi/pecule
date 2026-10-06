@@ -40,4 +40,5 @@ Valable pour le code, les commentaires, les messages de commit et les comptes re
 
 - phrases courtes, mots simples, information utile seulement ;
 - pas d'emojis, pas de points d'exclamation, pas de formules creuses (« robuste », « élégant », « seamless », « Voici… ») ;
-- pas de résumé de ce qui vient d'être dit.
+- pas de résumé de ce qui vient d'être dit ;
+- jamais le signe « § » (on écrit « section 8.1 ») ni le tiret cadratin « — ».

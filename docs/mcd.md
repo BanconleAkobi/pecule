@@ -172,7 +172,7 @@ Elles disent en français ce que le schéma dit en cardinalités. Chaque règle 
 
 ## Du MCD aux tables
 
-En appliquant les règles de passage classiques, on obtient les tables du cahier des charges (§6.2), avec cinq simplifications volontaires.
+En appliquant les règles de passage classiques, on obtient les tables du cahier des charges (section 6.2), avec cinq simplifications volontaires.
 
 ### Tables
 
