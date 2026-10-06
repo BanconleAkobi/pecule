@@ -10,9 +10,51 @@ ThemeData buildPeculeTheme() {
     scaffoldBackgroundColor: PeculePalette.background,
     fontFamily: PeculeFonts.sans,
     textTheme: _textTheme,
+    filledButtonTheme: _filledButtonTheme,
+    outlinedButtonTheme: _outlinedButtonTheme,
+    snackBarTheme: _snackBarTheme,
     extensions: const [PeculeColors.dark],
   );
 }
+
+// Boutons en pilule de la maquette : le principal en pollen, le secondaire
+// transparent avec un contour fin.
+final _filledButtonTheme = FilledButtonThemeData(
+  style: FilledButton.styleFrom(
+    backgroundColor: PeculePalette.pollen,
+    foregroundColor: PeculePalette.onPollen,
+    disabledBackgroundColor: PeculePalette.border,
+    disabledForegroundColor: PeculePalette.textMuted,
+    minimumSize: const Size.fromHeight(56),
+    shape: const StadiumBorder(),
+    textStyle: _textTheme.labelLarge,
+  ),
+);
+
+final _outlinedButtonTheme = OutlinedButtonThemeData(
+  style: OutlinedButton.styleFrom(
+    foregroundColor: PeculePalette.text,
+    minimumSize: const Size(0, 50),
+    padding: const EdgeInsets.symmetric(horizontal: 22),
+    shape: const StadiumBorder(),
+    side: const BorderSide(color: PeculePalette.border),
+    textStyle: _textTheme.labelLarge?.copyWith(fontSize: 15),
+  ),
+);
+
+// Le toast de la maquette : une pilule claire au-dessus de la barre d'onglets.
+const _snackBarTheme = SnackBarThemeData(
+  behavior: SnackBarBehavior.floating,
+  backgroundColor: PeculePalette.text,
+  contentTextStyle: TextStyle(
+    fontFamily: PeculeFonts.sans,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: PeculePalette.background,
+  ),
+  shape: StadiumBorder(),
+  elevation: 0,
+);
 
 const _colorScheme = ColorScheme.dark(
   primary: PeculePalette.pollen,

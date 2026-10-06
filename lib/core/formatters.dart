@@ -41,10 +41,12 @@ String formatRate(double rate) => _digits(rate, '0.0000');
 /// [day] : jour de cotation à minuit UTC, affiché tel quel.
 String formatDay(DateTime day) => DateFormat('d MMM y', _locale).format(day);
 
-String formatUpdatedAt(DateTime updatedAt) => DateFormat(
-  "'Mis à jour le' d MMM 'à' HH:mm",
-  _locale,
-).format(updatedAt.toLocal());
+/// Moment d'une mise à jour, à l'heure du téléphone : « 4 oct. à 18:02 ».
+String formatDayAndTime(DateTime moment) =>
+    DateFormat("d MMM 'à' HH:mm", _locale).format(moment.toLocal());
+
+String formatUpdatedAt(DateTime updatedAt) =>
+    'Mis à jour le ${formatDayAndTime(updatedAt)}';
 
 String formatTradingDayUsed(DateTime day) =>
     DateFormat("'Cours du' EEEE d MMMM 'utilisé'", _locale).format(day);

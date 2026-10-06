@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pecule/app/theme/pecule_palette.dart';
+import 'package:pecule/domain/models/asset_type.dart';
 
 /// Couleurs de la maquette qui n'ont pas de rôle dans le [ColorScheme] de Material.
 class PeculeColors extends ThemeExtension<PeculeColors> {
@@ -39,6 +40,12 @@ class PeculeColors extends ThemeExtension<PeculeColors> {
   final Color stock;
   final Color etf;
   final Color crypto;
+
+  Color forAssetType(AssetType type) => switch (type) {
+    AssetType.stock => stock,
+    AssetType.etf => etf,
+    AssetType.crypto => crypto,
+  };
 
   @override
   PeculeColors copyWith({

@@ -93,6 +93,10 @@ void main() {
       expect(formatDay(DateTime.utc(2026, 10, 4)), '4 oct. 2026');
     });
 
+    test('affiche un jour et une heure, pour le bandeau hors connexion', () {
+      expect(formatDayAndTime(DateTime(2026, 10, 4, 18, 2)), '4 oct. à 18:02');
+    });
+
     test('affiche la date et l\'heure de mise à jour', () {
       expect(
         formatUpdatedAt(DateTime(2026, 10, 4, 18, 2)),
