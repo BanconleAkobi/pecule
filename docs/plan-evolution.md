@@ -214,7 +214,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
   5. en cas d'échec, garder la base, marquer les données comme anciennes, remonter l'erreur comme information.
   Premier téléchargement : depuis le 1er janvier 2020 pour une action ou un ETF, 364 jours pour une crypto. Le repository ne lève jamais d'erreur réseau : elle accompagne les données dans `CachedData`, même vides.
 - [x] Source des cours `data/remote/price_source.dart` : Twelve Data ou CoinGecko selon le type d'actif, conversion en `PriceBar`.
-- [ ] Taux de change, même logique.
+- [x] Taux de change, même logique, dans `data/repositories/fx_rate_repository.dart`, depuis le 1er janvier 2020. L'algorithme commun vit dans `data/repositories/incremental_sync.dart` ; chaque repository ne décrit que sa série (`SyncedSeries`).
 - [x] Tirer pour actualiser : ignore les six heures, reste incrémental (`forceRefresh`).
 - [x] Cryptos : seule la journée en cours est réécrite (le dernier jour reçu est redemandé).
 - [x] Vider le cache : les trois tables de cache, rien d'autre (`clearCache`).

@@ -6,6 +6,7 @@ import 'package:pecule/data/local/sync_state.dart';
 import 'package:pecule/data/local/sync_state_dao.dart';
 import 'package:pecule/data/remote/api_exceptions.dart';
 import 'package:pecule/data/remote/price_source.dart';
+import 'package:pecule/data/repositories/incremental_sync.dart';
 import 'package:pecule/data/repositories/price_history_repository.dart';
 import 'package:pecule/domain/models/asset.dart';
 import 'package:pecule/domain/models/price_bar.dart';
@@ -45,9 +46,8 @@ void main() {
     source = MockPriceSource();
     repository = PriceHistoryRepository(
       priceBars: priceBars,
-      syncStates: syncStates,
       source: source,
-      clock: FixedClock(now),
+      sync: IncrementalSync(syncStates: syncStates, clock: FixedClock(now)),
     );
   });
   tearDown(() => database.close());
