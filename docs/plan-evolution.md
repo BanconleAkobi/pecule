@@ -88,7 +88,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ### Socle
 
-- [ ] Formateurs dans `core/`, testés : montant (2 décimales, 3 sous 1 €, arrondi à l'euro pour la simulation), pourcentage signé avec `−` et flèche, quantité (4 décimales et symbole), taux (4 décimales), dates (`4 oct. 2026`, `Mis à jour le 4 oct. à 18:02`, `Cours du vendredi 3 janvier utilisé`).
+- [x] Formateurs dans `core/formatters.dart`, testés : montant (2 décimales, 3 sous 1 €, arrondi à l'euro pour la simulation), pourcentage signé avec `−` et flèche, quantité (4 décimales et symbole), taux (4 décimales), dates (`4 oct. 2026`, `Mis à jour le 4 oct. à 18:02`, `Cours du vendredi 3 janvier utilisé`).
 - [x] Type « résultat indisponible » : `Computed<T>` dans `lib/domain/computed.dart`.
 - L'horloge injectable passe en S2 : les calculs reçoivent la date du jour en paramètre, seuls les repositories en ont besoin.
 

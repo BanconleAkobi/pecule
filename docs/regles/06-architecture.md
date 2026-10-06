@@ -57,7 +57,7 @@ Un dossier n'est créé que lorsqu'il reçoit son premier fichier.
 | --- | --- | --- |
 | flutter_riverpod | États | Retenu |
 | http | REST | Retenu |
-| intl | Formats français | Retenu |
+| intl | Formats français | Retenu, ajouté en S1 |
 | mocktail | Doublures de test (dev) | Retenu |
 | sqflite | SQLite, requêtes écrites à la main | Retenu, ajouté en S2 |
 | sqflite_common_ffi | Base en mémoire pour tester les repositories (dev) | Retenu, ajouté en S2 |
