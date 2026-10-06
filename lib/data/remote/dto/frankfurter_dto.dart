@@ -1,4 +1,4 @@
-import 'package:pecule/data/remote/dto/json_dates.dart';
+import 'package:pecule/data/iso_day.dart';
 
 class FrankfurterRateDto {
   const FrankfurterRateDto({
@@ -10,7 +10,7 @@ class FrankfurterRateDto {
 
   factory FrankfurterRateDto.fromJson(Map<String, dynamic> json) {
     return FrankfurterRateDto(
-      day: parseDay(json['date'] as String),
+      day: parseIsoDay(json['date'] as String),
       base: json['base'] as String,
       quote: json['quote'] as String,
       rate: (json['rate'] as num).toDouble(),

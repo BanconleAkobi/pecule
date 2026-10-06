@@ -151,7 +151,8 @@ Elles disent en français ce que le schéma dit en cardinalités. Chaque règle 
 | Attribut | Signification | Type | Exemple |
 | --- | --- | --- | --- |
 | jour | Jour de cotation, avec l'actif comme identifiant | Date | 03/10/2026 |
-| ouverture, plus_haut, plus_bas, clôture | Cours de la journée, dans la devise de l'actif | Décimal | 214,30 |
+| ouverture, plus_haut, plus_bas | Cours de la journée, dans la devise de l'actif. Vides pour les cryptos, que CoinGecko ne détaille pas | Décimal ou vide | 330,00 |
+| clôture | Dernier cours de la journée, dans la devise de l'actif | Décimal | 330,32 |
 | volume | Quantité échangée dans la journée | Décimal | 48 213 000 |
 | capitalisation | Valeur totale en circulation, pour les cryptos seulement | Décimal ou vide | |
 

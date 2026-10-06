@@ -4,6 +4,9 @@ enum Currency {
 
   const Currency(this.code, this.symbol);
 
+  static Currency fromCode(String code) =>
+      values.firstWhere((currency) => currency.code == code);
+
   final String code;
   final String symbol;
 }

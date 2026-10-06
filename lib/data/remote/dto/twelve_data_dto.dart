@@ -1,4 +1,4 @@
-import 'package:pecule/data/remote/dto/json_dates.dart';
+import 'package:pecule/data/iso_day.dart';
 
 class TwelveDataTimeSeriesDto {
   const TwelveDataTimeSeriesDto({
@@ -38,7 +38,7 @@ class TwelveDataBarDto {
   // Twelve Data donne les prix et le volume en texte : « "338.98001" ».
   factory TwelveDataBarDto.fromJson(Map<String, dynamic> json) {
     return TwelveDataBarDto(
-      day: parseDay(json['datetime'] as String),
+      day: parseIsoDay(json['datetime'] as String),
       open: double.parse(json['open'] as String),
       high: double.parse(json['high'] as String),
       low: double.parse(json['low'] as String),

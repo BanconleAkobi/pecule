@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
+import 'package:pecule/data/iso_day.dart';
 import 'package:pecule/data/remote/dto/frankfurter_dto.dart';
-import 'package:pecule/data/remote/dto/json_dates.dart';
 import 'package:pecule/data/remote/http_json.dart';
 
 class FrankfurterClient {
@@ -15,7 +15,7 @@ class FrankfurterClient {
     required DateTime from,
   }) async {
     final uri = Uri.https(_host, '/v2/rates', {
-      'from': formatApiDay(from),
+      'from': formatIsoDay(from),
       'base': 'EUR',
       'quotes': 'USD',
     });

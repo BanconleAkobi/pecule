@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
+import 'package:pecule/data/iso_day.dart';
 import 'package:pecule/data/remote/api_exceptions.dart';
-import 'package:pecule/data/remote/dto/json_dates.dart';
 import 'package:pecule/data/remote/dto/twelve_data_dto.dart';
 import 'package:pecule/data/remote/http_json.dart';
 
@@ -24,7 +24,7 @@ class TwelveDataClient {
     final uri = Uri.https(_host, '/time_series', {
       'symbol': symbol,
       'interval': '1day',
-      'start_date': formatApiDay(startDay),
+      'start_date': formatIsoDay(startDay),
       'order': 'asc',
       'outputsize': _maxOutputSize,
     });
