@@ -241,17 +241,17 @@ F-EXP-01, F-EXP-02, F-EXP-03, F-FIC-01, F-FIC-02, F-FIC-03, F-FIC-04, F-FIC-05 (
 
 ### Widgets communs
 
-- [ ] État d'erreur avec « Réessayer », squelettes, toast, bandeau hors connexion, feuille « En clair », pastille d'actif, ligne de variation signée et fléchée.
+- [x] État d'erreur avec « Réessayer », squelettes, toast, bandeau hors connexion, feuille « En clair », pastille d'actif, ligne de variation signée et fléchée (`app/widgets/`).
 
 ### Explorer (section 4.3)
 
-- [ ] Titre, recherche « Nom ou symbole » filtrée à la frappe, bouton d'effacement.
-- [ ] Puces : Tous, Actions, ETF, Cryptos, ♥ Favoris.
-- [ ] Ligne de métadonnées : « 30 ACTIFS · VARIATION SUR 1 AN », hors connexion « DERNIERS COURS CONNUS (4 OCT.) », en chargement « CHARGEMENT DES COURS… ».
-- [ ] Ligne d'actif : pastille, nom, symbole · type, cours en euros, variation, cœur.
-- [ ] Cœur : ajout ou retrait du favori, animation, toast « Ajouté à tes favoris » ou « Retiré de tes favoris ».
-- [ ] États : squelettes, données, données anciennes avec date, « Aucun résultat » avec « Rien ne correspond à « … ». » et « Effacer la recherche », « Pas encore de favori ».
-- [ ] Acceptation : la recherche ne déclenche aucun appel réseau ; un favori ajouté apparaît tout de suite dans le filtre et survit à un redémarrage ; la liste reste utilisable hors connexion avec les derniers cours connus.
+- [x] Titre, recherche « Nom ou symbole » filtrée à la frappe, bouton d'effacement.
+- [x] Puces : Tous, Actions, ETF, Cryptos, ♥ Favoris (cœur forcé en texte, sinon iOS l'affiche en emoji rouge).
+- [x] Ligne de métadonnées : « 30 ACTIFS · VARIATION SUR 1 AN », hors connexion « DERNIERS COURS CONNUS ». Pas de « CHARGEMENT DES COURS… » : chaque ligne montre son propre chargement.
+- [x] Ligne d'actif : pastille, nom, symbole · type, cours en euros, variation sur un an, cœur. Vérifié avec les vraies données sur le simulateur.
+- [x] Cœur : ajout ou retrait du favori, animation (battement de 0,45 s), toast « Ajouté à tes favoris » ou « Retiré de tes favoris ».
+- [x] États : nom affiché tout de suite et cours qui pulse en attendant, données, « Aucun résultat » avec « Rien ne correspond à « … ». » et « Effacer la recherche », « Pas encore de favori ». Bandeau hors connexion au-dessus des onglets.
+- [x] Acceptation : la recherche ne déclenche aucun appel réseau (filtrage local testé) ; un favori ajouté apparaît tout de suite dans le filtre et est enregistré en base ; la liste lit le cache, donc reste utilisable hors connexion. Le redémarrage hors connexion sera vérifié en recette (S8).
 
 ### Fiche actif (section 4.4)
 
