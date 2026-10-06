@@ -40,4 +40,6 @@ enum UnavailableReason {
   missingPrice,
   noDataForDate,
   notEnoughPrices,
+  startInFuture,
+  noPriceAfterStart,
 }

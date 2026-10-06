@@ -124,15 +124,17 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ### Simulation DCA (section 8.3)
 
-- [ ] Dates prévues entre le début et aujourd'hui selon la fréquence (semaine ou mois).
-- [ ] Pour chaque date : premier cours de clôture disponible à partir de cette date, converti au taux du jour, quantité = montant / cours en euros.
-- [ ] Sorties : capital investi (achats × montant), valeur finale (Σ quantités × cours final en euros), performance (valeur finale / capital − 1), prix moyen (capital / Σ quantités), série jour par jour (capital cumulé, valeur des quantités cumulées).
-- [ ] Cas limites : début dans le futur, aucun cours après le début, historique avec des trous, montant nul, une seule période, dernier achat tombant aujourd'hui.
+- [x] Dates prévues entre le début et aujourd'hui selon la fréquence (semaine ou mois).
+- [x] Pour chaque date : premier cours de clôture disponible à partir de cette date, converti au taux du jour, quantité = montant / cours en euros.
+- [x] Sorties : capital investi (achats × montant), valeur finale (Σ quantités × cours final en euros), performance (valeur finale / capital − 1), prix moyen (capital / Σ quantités), série jour par jour (capital cumulé, valeur des quantités cumulées).
+- [x] Cas limites : début dans le futur, aucun cours après le début, historique avec des trous, montant nul, une seule période, dernier achat tombant aujourd'hui.
+- Choix faits dans `calculations/dca.dart` : un achat prévu aujourd'hui sans cours publié n'est pas compté ; deux achats tombés dans un trou utilisent le même cours ; le 31 d'un mois devient le dernier jour des mois plus courts.
 
 ### Effet de change (section 8.4)
 
-- [ ] perf_eur = (1 + perf_usd) × r_début / r_fin − 1. L'effet de change est l'écart entre les deux, en points.
-- [ ] Test : +18 % en dollars, euro de 1,05 à 1,10, donne +12,6 % en euros.
+- [x] perf_eur = (1 + perf_usd) × r_début / r_fin − 1. L'effet de change est l'écart entre les deux, en points.
+- [x] Test : +18 % en dollars, euro de 1,05 à 1,10, donne +12,6 % en euros.
+- [x] En plus, variation entre deux cours (énoncé, section 8), dans `calculations/variation.dart` : pour l'en-tête de la fiche et l'Explorer.
 
 ### Risque et score de stabilité (section 8.5)
 
@@ -151,12 +153,13 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ### Intérêts composés (section 8.6)
 
-- [ ] Capital final = capital × (1 + taux)^années. Test : 1 000 € à 5 % sur 10 ans donnent 1 628,89 €.
+- [x] Capital final = capital × (1 + taux)^années. Test : 1 000 € à 5 % sur 10 ans donnent 1 628,89 €.
 
 ### Niveau de l'onboarding (section 4.2)
 
-- [ ] Un point par bonne réponse. 0 à 1 Découverte, 2 à 3 Initié, 4 à 5 À l'aise. Questionnaire passé : Découverte.
-- [ ] Chaque erreur renvoie à sa leçon associée.
+- [x] Un point par bonne réponse. 0 à 1 Découverte, 2 à 3 Initié, 4 à 5 À l'aise. Questionnaire passé : Découverte.
+- [x] Chaque erreur renvoie à sa leçon associée.
+- Le contenu des cinq questions (textes de la maquette) arrive en S6 avec les écrans de l'onboarding.
 
 **Terminé quand** tous les calculs et leurs cas limites sont testés et verts.
 
