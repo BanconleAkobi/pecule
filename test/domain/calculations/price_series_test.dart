@@ -115,6 +115,42 @@ void main() {
     });
   });
 
+  group('cours affiché dans l\'Explorer', () {
+    test('donne le dernier cours en euros et la variation sur un an', () {
+      final quote = computeAssetQuote(
+        [
+          closeOn(DateTime.utc(2025, 6, 2), 50),
+          closeOn(DateTime.utc(2025, 10, 7), 110),
+          closeOn(day(10, 7), 132),
+        ],
+        currency: Currency.usd,
+        eurUsdRates: [eurUsd(DateTime.utc(2025, 1, 2), 1.10)],
+        today: day(10, 7),
+      );
+
+      expect(quote.latestPriceEur, isAvailableCloseTo(120));
+      expect(quote.yearChange, isAvailableCloseTo(0.20));
+    });
+
+    test('n\'a ni cours ni variation sans historique', () {
+      final quote = computeAssetQuote(
+        [],
+        currency: Currency.usd,
+        eurUsdRates: [],
+        today: day(10, 7),
+      );
+
+      expect(
+        quote.latestPriceEur,
+        isUnavailableBecause(UnavailableReason.notEnoughPrices),
+      );
+      expect(
+        quote.yearChange,
+        isUnavailableBecause(UnavailableReason.notEnoughPrices),
+      );
+    });
+  });
+
   group('effet de change sur la période', () {
     test('retrouve l\'exemple du cahier sur un historique en dollars', () {
       final effect = computeCurrencyEffectOverBars(

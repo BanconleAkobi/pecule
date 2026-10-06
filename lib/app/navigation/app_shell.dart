@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pecule/app/dependencies.dart';
 import 'package:pecule/app/navigation/app_tab.dart';
 import 'package:pecule/app/navigation/pecule_tab_bar.dart';
+import 'package:pecule/app/widgets/offline_banner.dart';
 import 'package:pecule/features/explorer/explorer_screen.dart';
 import 'package:pecule/features/learn/learn_screen.dart';
+import 'package:pecule/features/market/market_providers.dart';
 import 'package:pecule/features/patrimoine/patrimoine_screen.dart';
 import 'package:pecule/features/simulator/simulator_screen.dart';
 
@@ -22,11 +26,23 @@ class _AppShellState extends State<AppShell> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        // L'indexedstack garde les quatre onglets construits : chacun conserve
-        // son état et sa position de défilement quand on change d'onglet.
-        body: IndexedStack(
-          index: _currentTab.index,
-          children: [for (final tab in AppTab.values) _TabScreen(tab: tab)],
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              const _OfflineBannerSlot(),
+              Expanded(
+                // L'indexedstack garde les quatre onglets construits : chacun conserve
+                // son état et sa position de défilement quand on change d'onglet.
+                child: IndexedStack(
+                  index: _currentTab.index,
+                  children: [
+                    for (final tab in AppTab.values) _TabScreen(tab: tab),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         bottomNavigationBar: PeculeTabBar(
           selectedTab: _currentTab,
@@ -34,6 +50,20 @@ class _AppShellState extends State<AppShell> {
         ),
       ),
     );
+  }
+}
+
+/// Le bandeau hors connexion, commun à tous les onglets. La date affichée est
+/// celle des derniers taux reçus, rafraîchis à chaque ouverture.
+class _OfflineBannerSlot extends ConsumerWidget {
+  const _OfflineBannerSlot();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isOffline = ref.watch(isOfflineProvider).value ?? false;
+    if (!isOffline) return const SizedBox.shrink();
+    final rates = ref.watch(eurUsdRatesProvider).value;
+    return OfflineBanner(dataUpdatedAt: rates?.updatedAt);
   }
 }
 

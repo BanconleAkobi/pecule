@@ -2,6 +2,7 @@ import 'package:pecule/domain/calculations/currency.dart';
 import 'package:pecule/domain/calculations/dated_lookup.dart';
 import 'package:pecule/domain/calculations/variation.dart';
 import 'package:pecule/domain/computed.dart';
+import 'package:pecule/domain/models/asset_quote.dart';
 import 'package:pecule/domain/models/chart_period.dart';
 import 'package:pecule/domain/models/currency.dart';
 import 'package:pecule/domain/models/currency_effect.dart';
@@ -59,6 +60,34 @@ Computed<double> computeSeriesChange(List<PricePoint> points) {
     return const Unavailable(UnavailableReason.notEnoughPrices);
   }
   return computeVariation(start: points.first.value, end: points.last.value);
+}
+
+/// Dernier cours en euros et variation sur un an. La variation part du premier
+/// cours de l'année écoulée : pour une crypto, dont l'historique s'arrête à
+/// 364 jours, c'est le premier cours disponible.
+AssetQuote computeAssetQuote(
+  List<PriceBar> bars, {
+  required Currency currency,
+  required List<FxRate> eurUsdRates,
+  required DateTime today,
+}) {
+  final points = closesInEur(
+    bars,
+    currency: currency,
+    eurUsdRates: eurUsdRates,
+  );
+  final lastYear = itemsInPeriod(
+    points,
+    ChartPeriod.oneYear,
+    today: today,
+    dayOf: (point) => point.day,
+  );
+  return AssetQuote(
+    latestPriceEur: points.isEmpty
+        ? const Unavailable(UnavailableReason.notEnoughPrices)
+        : Available(points.last.value),
+    yearChange: computeSeriesChange(lastYear),
+  );
 }
 
 /// Effet de change sur la durée de [bars], historique d'un actif coté en
