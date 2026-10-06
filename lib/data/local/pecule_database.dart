@@ -1,7 +1,17 @@
+import 'package:path/path.dart' as p;
 import 'package:pecule/data/local/database_schema.dart';
 import 'package:sqflite/sqflite.dart';
 
 const databaseFileName = 'pecule.db';
+
+/// La base du téléphone, dans le dossier prévu par le système.
+Future<Database> openDeviceDatabase() async {
+  final directory = await getDatabasesPath();
+  return openPeculeDatabase(
+    databaseFactory,
+    p.join(directory, databaseFileName),
+  );
+}
 
 /// [factory] et [path] sont fournis par l'appelant : la vraie base sur le
 /// téléphone, une base en mémoire dans les tests.

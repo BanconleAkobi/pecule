@@ -21,3 +21,8 @@ Une ligne par décision technique, au moment où elle est prise. À recopier dan
 | 06/10/2026 | Hors connexion déduit des échecs réseau | connectivity_plus | Aucune dépendance ; une interface active ne garantit pas que l'API répond |
 | 06/10/2026 | Simulateur : date de début libre et validée, 30 actifs proposés | Liste de janviers et 6 actifs de la maquette | Validation de date exigée par le formulaire, aucun actif exclu |
 | 06/10/2026 | Confirmation avant de réinitialiser le portefeuille | Suppression directe (maquette) | Action irréversible |
+| 07/10/2026 | Un seul algorithme de cache (`IncrementalSync`) partagé par les cours et les taux | Un algorithme par repository | Deux utilisateurs réels : une seule réponse à « qui décide entre cache et réseau ? » |
+| 07/10/2026 | Le repository range l'erreur réseau dans `CachedData` au lieu de la lever | Erreur levée, état d'erreur seul | L'écran a toujours une donnée : cache avec bandeau, ou état vide explicite hors connexion (section 7.4) |
+| 07/10/2026 | Assemblage des objets dans `app/dependencies.dart`, base ouverte dans `main` | Construction dans les écrans, base ouverte à la demande | Injection testable : chaque provider peut être remplacé par une doublure |
+| 07/10/2026 | Pas de `MissingPriceException` | Exception dédiée | Un cours manquant est un calcul impossible, déjà représenté par `Computed` |
+| 07/10/2026 | Icône : la tirelire couronnée sur fond pollen, générée par `flutter_launcher_icons` (dev) | Fond sombre de l'app, tailles exportées à la main | La tirelire noire disparaît sur fond sombre ; le pollen est la couleur de la marque ; une seule commande pour iOS et Android |

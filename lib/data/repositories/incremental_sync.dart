@@ -5,6 +5,7 @@ import 'package:pecule/core/clock.dart';
 import 'package:pecule/data/iso_day.dart';
 import 'package:pecule/data/local/sync_state.dart';
 import 'package:pecule/data/local/sync_state_dao.dart';
+import 'package:pecule/data/network_status.dart';
 import 'package:pecule/data/remote/api_exceptions.dart';
 import 'package:pecule/domain/calculations/trading_calendar.dart';
 
@@ -34,12 +35,17 @@ abstract interface class SyncedSeries<T> {
 /// Décide entre cache et réseau (cahier des charges, section 7.2). C'est le
 /// seul endroit qui prend cette décision.
 class IncrementalSync {
-  IncrementalSync({required this._syncStates, required this._clock});
+  IncrementalSync({
+    required this._syncStates,
+    required this._clock,
+    required this._networkStatus,
+  });
 
   static const freshnessDelay = Duration(hours: 6);
 
   final SyncStateDao _syncStates;
   final Clock _clock;
+  final NetworkStatus _networkStatus;
 
   /// Émet tout de suite ce qui est en base, puis la série complétée si un
   /// téléchargement était nécessaire. Une erreur réseau n'interrompt jamais le
@@ -69,6 +75,7 @@ class IncrementalSync {
     final since = _downloadStart(series, syncState, now);
     try {
       final downloaded = await series.download(since: since);
+      _networkStatus.reportSuccess();
       await series.save(downloaded);
       // Sans aucune valeur ni en base ni dans la réponse, il n'y a pas encore
       // de dernier jour à retenir : on retentera au prochain affichage.
@@ -85,6 +92,7 @@ class IncrementalSync {
       );
       yield CachedData(value: await series.readCached(), updatedAt: now);
     } on ApiException catch (error) {
+      _networkStatus.reportFailure(error);
       yield CachedData(
         value: cached,
         updatedAt: syncState?.lastFetchedAt,

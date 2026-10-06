@@ -4,6 +4,7 @@ import 'package:pecule/core/cached_data.dart';
 import 'package:pecule/data/local/price_bar_dao.dart';
 import 'package:pecule/data/local/sync_state.dart';
 import 'package:pecule/data/local/sync_state_dao.dart';
+import 'package:pecule/data/network_status.dart';
 import 'package:pecule/data/remote/api_exceptions.dart';
 import 'package:pecule/data/remote/price_source.dart';
 import 'package:pecule/data/remote/request_throttle.dart';
@@ -33,6 +34,7 @@ void main() {
   late PriceBarDao priceBars;
   late SyncStateDao syncStates;
   late MockPriceSource source;
+  late NetworkStatus networkStatus;
   late PriceHistoryRepository repository;
 
   setUpAll(() {
@@ -46,10 +48,15 @@ void main() {
     priceBars = PriceBarDao(database);
     syncStates = SyncStateDao(database);
     source = MockPriceSource();
+    networkStatus = NetworkStatus();
     repository = PriceHistoryRepository(
       priceBars: priceBars,
       source: source,
-      sync: IncrementalSync(syncStates: syncStates, clock: FixedClock(now)),
+      sync: IncrementalSync(
+        syncStates: syncStates,
+        clock: FixedClock(now),
+        networkStatus: networkStatus,
+      ),
     );
   });
   tearDown(() => database.close());
@@ -285,5 +292,28 @@ void main() {
         expect(emitted.single.refreshError, isA<RateLimitException>());
       },
     );
+  });
+
+  group('état de la connexion', () {
+    test(
+      'passe hors ligne quand le téléchargement échoue faute de réseau',
+      () async {
+        failWith(const NetworkException('hors ligne'));
+
+        await watch(apple);
+
+        expect(networkStatus.isOffline, isTrue);
+      },
+    );
+
+    test('revient en ligne dès qu\'un téléchargement réussit', () async {
+      failWith(const NetworkException('hors ligne'));
+      await watch(apple);
+      answerWith([closeOn(october(7), 332)]);
+
+      await watch(apple);
+
+      expect(networkStatus.isOffline, isFalse);
+    });
   });
 }

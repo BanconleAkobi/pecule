@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pecule/data/local/fx_rate_dao.dart';
 import 'package:pecule/data/local/sync_state.dart';
 import 'package:pecule/data/local/sync_state_dao.dart';
+import 'package:pecule/data/network_status.dart';
 import 'package:pecule/data/remote/api_exceptions.dart';
 import 'package:pecule/data/remote/dto/frankfurter_dto.dart';
 import 'package:pecule/data/remote/frankfurter_client.dart';
@@ -42,7 +43,11 @@ void main() {
     repository = FxRateRepository(
       fxRates: fxRates,
       frankfurter: frankfurter,
-      sync: IncrementalSync(syncStates: syncStates, clock: clock),
+      sync: IncrementalSync(
+        syncStates: syncStates,
+        clock: clock,
+        networkStatus: NetworkStatus(),
+      ),
     );
   });
   tearDown(() => database.close());

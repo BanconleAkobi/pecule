@@ -176,13 +176,13 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 ### Clients
 
 - [x] Horloge injectable dans `core/clock.dart`, figée dans les tests (`test/helpers/fixed_clock.dart`).
-- [ ] Lecture des clés API par `String.fromEnvironment`, lancement avec `--dart-define-from-file=env.json`.
+- [x] Lecture des clés API par `String.fromEnvironment` (`core/api_keys.dart`), lancement avec `--dart-define-from-file=env.json`.
 - [x] Une vraie réponse par endpoint dans `test/fixtures/` et un test d'apprentissage pour chacune. Enregistrées par `tool/fetch_fixtures.sh`.
 - [x] `TwelveDataClient`, `CoinGeckoClient`, `FrankfurterClient` : requête, statut, parsing en DTO. Requête commune dans `data/remote/http_json.dart`.
 - [x] DTO et `fromJson` testés.
-- [ ] Conversion des DTO en modèles du domaine (dans les repositories).
+- [x] Conversion des DTO en modèles du domaine : dans `RemotePriceSource` pour les cours, dans `FxRateRepository` pour les taux.
 - [x] Exceptions typées des API : `NetworkException`, `RateLimitException`, `ApiErrorException`, `UnexpectedResponseException`.
-- [ ] `MissingPriceException`, avec les repositories.
+- [x] `MissingPriceException` abandonnée : un cours manquant est un calcul impossible, déjà représenté par `Unavailable(UnavailableReason.missingPrice)`.
 - [x] File d'attente unique pour Twelve Data, au débit autorisé (`data/remote/request_throttle.dart`) : 8 requêtes par minute glissante, priorité haute pour la fiche ouverte, basse pour l'Explorer en arrière-plan. Une erreur de quota restante devient une `RateLimitException`.
 - [x] Catalogue de 30 instruments en constante (`data/catalogue.dart`) : identifiant du fournisseur, nom, symbole affiché, type, devise. Le fournisseur se déduit du type.
 
@@ -201,7 +201,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
   - `fx_rate` (day, base, quote, rate), clé (day, base, quote)
   - `sync_state` (resource_key, last_data_day, last_fetched_at)
 - [x] DAO des données utilisateur. `quiz_mistakes` stocké en JSON (liste des leçons liées aux erreurs).
-- [ ] DAO appelés uniquement par les repositories.
+- [x] DAO appelés uniquement par les repositories (et par `app/dependencies.dart`, qui les construit).
 
 ### Repositories et cache (section 7)
 
@@ -221,8 +221,9 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 - [x] Vider le cache : les trois tables de cache, rien d'autre (`clearCache`).
 - [x] Repositories utilisateur : favoris, achats, profil, leçons vues, simulations. Celui des préférences attend qu'une préférence soit définie.
 - [x] Journal de débogage des jours téléchargés (`dart:developer`, nom `pecule.cache`).
-- [ ] Détection hors connexion.
-- [ ] Providers des repositories et de l'horloge.
+- [x] Détection hors connexion : `data/network_status.dart`, mis à jour par `IncrementalSync`, exposé par `isOfflineProvider`.
+- [x] Providers des repositories et de l'horloge : `app/dependencies.dart`. La base est ouverte dans `main` avant le premier écran.
+- [x] Vérifié au lancement : l'app démarre sur le simulateur iPhone 17 avec la vraie base.
 
 ### Tests
 
