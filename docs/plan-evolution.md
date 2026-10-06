@@ -174,7 +174,7 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ### Clients
 
-- [ ] Horloge injectable dans `core/`, fournie aux repositories.
+- [x] Horloge injectable dans `core/clock.dart`, figée dans les tests (`test/helpers/fixed_clock.dart`).
 - [ ] Lecture des clés API par `String.fromEnvironment`, lancement avec `--dart-define-from-file=env.json`.
 - [x] Une vraie réponse par endpoint dans `test/fixtures/` et un test d'apprentissage pour chacune. Enregistrées par `tool/fetch_fixtures.sh`.
 - [x] `TwelveDataClient`, `CoinGeckoClient`, `FrankfurterClient` : requête, statut, parsing en DTO. Requête commune dans `data/remote/http_json.dart`.
@@ -204,30 +204,32 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 
 ### Repositories et cache (section 7)
 
-- [ ] `CachedData` : valeur, date de mise à jour, indication « peut-être ancienne ».
-- [ ] Dernier jour de cotation attendu, en fonction pure testée : veille ou jour même selon l'heure, week-ends sautés pour les actions et ETF, tous les jours pour les cryptos et le change.
-- [ ] Historique des cours, dans l'ordre :
+- [x] `CachedData` dans `core/cached_data.dart` : valeur, date de mise à jour, erreur de la dernière actualisation (« peut-être ancienne »).
+- [x] Dernier jour de cotation attendu, dans `domain/calculations/trading_calendar.dart` : actions et ETF du lundi au vendredi à partir de 22 h UTC, cryptos tous les jours dès minuit UTC, taux tous les jours à partir de 16 h UTC. Jours fériés non connus (limite à citer dans le rapport).
+- [x] Historique des cours, dans `data/repositories/price_history_repository.dart`, dans l'ordre :
   1. renvoyer tout de suite ce qui est en base ;
   2. s'arrêter si `last_fetched_at` a moins de six heures ;
   3. si `last_data_day` est déjà le dernier jour attendu, mettre à jour `last_fetched_at` et s'arrêter ;
   4. sinon ne demander que les jours manquants depuis `last_data_day` + 1, insérer, mettre à jour `sync_state` ;
   5. en cas d'échec, garder la base, marquer les données comme anciennes, remonter l'erreur comme information.
+  Premier téléchargement : depuis le 1er janvier 2020 pour une action ou un ETF, 364 jours pour une crypto. Le repository ne lève jamais d'erreur réseau : elle accompagne les données dans `CachedData`, même vides.
+- [x] Source des cours `data/remote/price_source.dart` : Twelve Data ou CoinGecko selon le type d'actif, conversion en `PriceBar`.
 - [ ] Taux de change, même logique.
-- [ ] Tirer pour actualiser : ignore les six heures, reste incrémental.
-- [ ] Cryptos : seule la journée en cours est réécrite.
-- [ ] Vider le cache : les trois tables de cache, rien d'autre.
+- [x] Tirer pour actualiser : ignore les six heures, reste incrémental (`forceRefresh`).
+- [x] Cryptos : seule la journée en cours est réécrite (le dernier jour reçu est redemandé).
+- [x] Vider le cache : les trois tables de cache, rien d'autre (`clearCache`).
 - [ ] Repositories utilisateur : favoris, transactions, profil, leçons vues, simulations, préférences.
-- [ ] Journal de débogage des jours téléchargés (sert à la recette).
+- [x] Journal de débogage des jours téléchargés (`dart:developer`, nom `pecule.cache`).
 - [ ] Détection hors connexion.
 - [ ] Providers des repositories et de l'horloge.
 
 ### Tests
 
-- [ ] Données fraîches : aucun appel réseau.
-- [ ] Données anciennes : seuls les jours manquants sont demandés.
-- [ ] Échec réseau ou quota : données conservées et marquées anciennes.
-- [ ] Vider le cache : données utilisateur intactes.
-- [ ] Crypto : seule la dernière journée est réécrite.
+- [x] Données fraîches : aucun appel réseau.
+- [x] Données anciennes : seuls les jours manquants sont demandés.
+- [x] Échec réseau ou quota : données conservées et marquées anciennes.
+- [x] Vider le cache : données utilisateur intactes.
+- [x] Crypto : seule la dernière journée est réécrite.
 
 **Terminé quand** un historique se télécharge, se met en cache, se complète et se lit hors connexion, le tout testé.
 
