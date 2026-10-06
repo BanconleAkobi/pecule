@@ -39,4 +39,5 @@ enum UnavailableReason {
   invalidRate,
   missingPrice,
   noDataForDate,
+  notEnoughPrices,
 }

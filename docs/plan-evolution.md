@@ -142,11 +142,12 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 | Volatilité annualisée | écart-type des rendements × √N, N = 252 (actions, ETF) ou 365 (cryptos) | Moins de deux rendements, série constante |
 | Plus forte baisse | min(cours / plus haut précédent − 1) | Série croissante (0 %), annexe A.2 : 100, 110, 125, 115, 90, 105 donnent −28 % |
 
-- [ ] Note de volatilité = 100 × (1 − min(volatilité, 0,80) / 0,80).
-- [ ] Note de baisse = 100 × (1 − min(|baisse|, 0,80) / 0,80).
-- [ ] Score = arrondi(0,5 × note de volatilité + 0,5 × note de baisse), calculé sur un an glissant.
-- [ ] Libellé : 0 à 39 Agité, 40 à 69 Modéré, 70 à 100 Stable.
-- [ ] Test : volatilité 20 % et baisse 25 % donnent 75 et 68,75, score 72, « Stable ».
+- [x] Les trois indicateurs du tableau et leurs cas limites, dans `calculations/risk.dart`. Écart-type d'échantillon (division par n − 1). En plus : cours nul refusé.
+- [x] Note de volatilité = 100 × (1 − min(volatilité, 0,80) / 0,80).
+- [x] Note de baisse = 100 × (1 − min(|baisse|, 0,80) / 0,80).
+- [x] Score = arrondi(0,5 × note de volatilité + 0,5 × note de baisse). Le découpage sur un an glissant se fera en S3, quand la fiche actif fournira les cours datés.
+- [x] Libellé : 0 à 39 Agité, 40 à 69 Modéré, 70 à 100 Stable.
+- [x] Test : volatilité 20 % et baisse 25 % donnent 75 et 68,75, score 72, « Stable ».
 
 ### Intérêts composés (section 8.6)
 
@@ -246,6 +247,7 @@ F-EXP-01, F-EXP-02, F-EXP-03, F-FIC-01, F-FIC-02, F-FIC-03, F-FIC-04, F-FIC-05 (
 - [ ] En-tête : retour, « SYMBOLE · Type », cœur. Nom, cours en euros, variation sur la période (chiffre traduisible).
 - [ ] Courbe : périodes 1M, 6M, 1A (par défaut), 3A, Max. Lecture au doigt : trait vertical, point, bulle « date · cours ». L'en-tête affiche alors la variation entre le début de la période et ce point, avec « au 4 janv. 2026 ».
 - [ ] Bloc « Dollar ou euro ? » : « En dollars » et « Pour toi, en euros » côte à côte, phrase qui explique l'écart. Masqué pour un actif coté en euros.
+- [ ] Sélection des cours de la dernière année (un an glissant) avant d'appeler `assessStability`, en fonction pure testée dans `domain/`.
 - [ ] Score de stabilité : jauge en arc, « 72/100 », libellé coloré, « Comprendre ce score ↓ » et « Masquer le détail ↑ ». Le détail montre les deux sous-scores avec leur valeur brute, leur note et une barre, puis la formule en mots simples. Mention « Basé sur le passé, ce n'est pas une prédiction. »
 - [ ] Cartes « Ça veut dire quoi ? » : Performance sur 1 an, Volatilité, Plus forte baisse, rédigées avec les chiffres de l'actif.
 - [ ] Bouton fixe « Ajouter à mon portefeuille ».
