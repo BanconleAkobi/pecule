@@ -1,5 +1,4 @@
-import 'dart:math' as math;
-
+import 'package:pecule/domain/calculations/calendar.dart';
 import 'package:pecule/domain/calculations/currency.dart';
 import 'package:pecule/domain/calculations/dated_lookup.dart';
 import 'package:pecule/domain/computed.dart';
@@ -94,24 +93,10 @@ DateTime _purchaseDate(DcaPlan plan, int period) {
       start.month,
       start.day + 7 * period,
     ),
-    DcaFrequency.monthly => _sameDayMonthsLater(start, period),
+    // On part toujours de la date de début, pour ne pas glisser au 28 les
+    // mois qui suivent un mois de février.
+    DcaFrequency.monthly => addMonths(start, period),
   };
-}
-
-// Le 31 janvier plus un mois donne le 28 février, pas le 3 mars. On part
-// toujours de la date de début pour ne pas glisser au 28 les mois suivants.
-DateTime _sameDayMonthsLater(DateTime start, int months) {
-  final targetMonth = DateTime.utc(start.year, start.month + months);
-  final lastDayOfMonth = DateTime.utc(
-    targetMonth.year,
-    targetMonth.month + 1,
-    0,
-  ).day;
-  return DateTime.utc(
-    targetMonth.year,
-    targetMonth.month,
-    math.min(start.day, lastDayOfMonth),
-  );
 }
 
 // Chaque achat se fait au premier cours publié à partir de sa date. Un achat
