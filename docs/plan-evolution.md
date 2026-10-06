@@ -182,8 +182,8 @@ Tout en TDD, dans `domain/` sans import Flutter. Chaque cas limite listé est un
 - [ ] Conversion des DTO en modèles du domaine (dans les repositories).
 - [x] Exceptions typées des API : `NetworkException`, `RateLimitException`, `ApiErrorException`, `UnexpectedResponseException`.
 - [ ] `MissingPriceException`, avec les repositories.
-- [ ] File d'attente unique pour Twelve Data, au débit autorisé. Une erreur de quota devient un message clair.
-- [ ] Catalogue de 30 instruments en constante (section 5.2) : identifiant, nom, symbole, symbole d'affichage, type, fournisseur, devise.
+- [x] File d'attente unique pour Twelve Data, au débit autorisé (`data/remote/request_throttle.dart`) : 8 requêtes par minute glissante, priorité haute pour la fiche ouverte, basse pour l'Explorer en arrière-plan. Une erreur de quota restante devient une `RateLimitException`.
+- [x] Catalogue de 30 instruments en constante (`data/catalogue.dart`) : identifiant du fournisseur, nom, symbole affiché, type, devise. Le fournisseur se déduit du type.
 
 ### Base
 

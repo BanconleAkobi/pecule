@@ -3,7 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:pecule/data/remote/coingecko_client.dart';
 import 'package:pecule/data/remote/price_source.dart';
+import 'package:pecule/data/remote/request_throttle.dart';
 import 'package:pecule/data/remote/twelve_data_client.dart';
+import 'package:pecule/domain/models/asset.dart';
+import 'package:pecule/domain/models/price_bar.dart';
 
 import '../../helpers/fixed_clock.dart';
 import '../../helpers/fixtures.dart';
@@ -18,24 +21,34 @@ void main() {
   });
 
   final now = DateTime.utc(2026, 10, 3);
+  final clock = FixedClock(now);
 
   final source = RemotePriceSource(
     twelveData: TwelveDataClient(
       answering('twelve_data_time_series_aapl.json'),
       'test-key',
     ),
+    twelveDataThrottle: RequestThrottle(
+      maxRequests: 8,
+      window: const Duration(minutes: 1),
+      clock: clock,
+    ),
     coinGecko: CoinGeckoClient(
       answering('coingecko_market_chart_range_bitcoin.json'),
       'test-key',
     ),
-    clock: FixedClock(now),
+    clock: clock,
   );
 
+  Future<List<PriceBar>> fetchSinceSeptember21(Asset asset) =>
+      source.fetchDailyBars(
+        asset,
+        since: DateTime.utc(2026, 9, 21),
+        priority: RequestPriority.high,
+      );
+
   test('récupère une action chez Twelve Data avec ouverture, plus haut et plus bas', () async {
-    final bars = await source.fetchDailyBars(
-      apple,
-      since: DateTime.utc(2026, 9, 21),
-    );
+    final bars = await fetchSinceSeptember21(apple);
 
     expect(bars, hasLength(9));
     expect(bars.first.day, DateTime.utc(2026, 9, 21));
@@ -47,10 +60,7 @@ void main() {
   test(
     'récupère une crypto chez CoinGecko avec sa capitalisation et son volume',
     () async {
-      final bars = await source.fetchDailyBars(
-        bitcoin,
-        since: DateTime.utc(2026, 9, 21),
-      );
+      final bars = await fetchSinceSeptember21(bitcoin);
 
       expect(bars, hasLength(13));
       expect(bars.first.close, closeTo(81169.035, 1e-3));
@@ -61,7 +71,7 @@ void main() {
   );
 
   test('demande à CoinGecko les cours jusqu\'à maintenant', () async {
-    await source.fetchDailyBars(bitcoin, since: DateTime.utc(2026, 9, 21));
+    await fetchSinceSeptember21(bitcoin);
 
     final nowInSeconds = now.millisecondsSinceEpoch ~/ 1000;
     expect(lastRequest.url.queryParameters['to'], '$nowInSeconds');

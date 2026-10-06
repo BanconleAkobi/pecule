@@ -6,6 +6,7 @@ import 'package:pecule/data/local/sync_state.dart';
 import 'package:pecule/data/local/sync_state_dao.dart';
 import 'package:pecule/data/remote/api_exceptions.dart';
 import 'package:pecule/data/remote/price_source.dart';
+import 'package:pecule/data/remote/request_throttle.dart';
 import 'package:pecule/data/repositories/incremental_sync.dart';
 import 'package:pecule/data/repositories/price_history_repository.dart';
 import 'package:pecule/domain/models/asset.dart';
@@ -37,6 +38,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(apple);
     registerFallbackValue(DateTime.utc(2000));
+    registerFallbackValue(RequestPriority.high);
   });
 
   setUp(() async {
@@ -52,14 +54,20 @@ void main() {
   });
   tearDown(() => database.close());
 
+  // N'importe quel appel à la source, quels que soient l'actif, le jour de
+  // départ et la priorité.
+  Future<List<PriceBar>> anyFetch() => source.fetchDailyBars(
+    any(),
+    since: any(named: 'since'),
+    priority: any(named: 'priority'),
+  );
+
   void answerWith(List<PriceBar> bars) {
-    when(() => source.fetchDailyBars(any(), since: any(named: 'since')))
-        .thenAnswer((_) async => bars);
+    when(anyFetch).thenAnswer((_) async => bars);
   }
 
   void failWith(ApiException error) {
-    when(() => source.fetchDailyBars(any(), since: any(named: 'since')))
-        .thenThrow(error);
+    when(anyFetch).thenThrow(error);
   }
 
   Future<void> seedCache(
@@ -84,8 +92,11 @@ void main() {
 
   DateTime requestedSince() =>
       verify(
-            () =>
-                source.fetchDailyBars(any(), since: captureAny(named: 'since')),
+            () => source.fetchDailyBars(
+              any(),
+              since: captureAny(named: 'since'),
+              priority: any(named: 'priority'),
+            ),
           ).captured.single
           as DateTime;
 
@@ -114,6 +125,23 @@ void main() {
         expect(requestedSince(), DateTime.utc(2025, 10, 8));
       },
     );
+
+    test('transmet à la source la priorité basse de l\'Explorer', () async {
+      answerWith([closeOn(october(7), 332)]);
+
+      await repository
+          .watchHistory(apple, priority: RequestPriority.low)
+          .toList();
+
+      final priority = verify(
+        () => source.fetchDailyBars(
+          any(),
+          since: any(named: 'since'),
+          priority: captureAny(named: 'priority'),
+        ),
+      ).captured.single;
+      expect(priority, RequestPriority.low);
+    });
   });
 
   group('cache à compléter', () {
@@ -193,9 +221,7 @@ void main() {
 
       final emitted = await watch(apple);
 
-      verifyNever(
-        () => source.fetchDailyBars(any(), since: any(named: 'since')),
-      );
+      verifyNever(anyFetch);
       expect(emitted.single.value, hasLength(1));
     });
 
@@ -223,9 +249,7 @@ void main() {
 
         final emitted = await watch(apple);
 
-        verifyNever(
-          () => source.fetchDailyBars(any(), since: any(named: 'since')),
-        );
+        verifyNever(anyFetch);
         expect(emitted.last.updatedAt, now);
         expect((await syncStates.find('asset:AAPL'))?.lastFetchedAt, now);
       },

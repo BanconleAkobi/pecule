@@ -1,6 +1,7 @@
 import 'package:pecule/core/cached_data.dart';
 import 'package:pecule/data/local/price_bar_dao.dart';
 import 'package:pecule/data/remote/price_source.dart';
+import 'package:pecule/data/remote/request_throttle.dart';
 import 'package:pecule/data/repositories/incremental_sync.dart';
 import 'package:pecule/domain/calculations/trading_calendar.dart';
 import 'package:pecule/domain/models/asset.dart';
@@ -24,23 +25,36 @@ class PriceHistoryRepository {
   final IncrementalSync _sync;
 
   /// [forceRefresh] : tirer pour actualiser, qui ignore le délai de six heures.
+  /// [priority] : basse pour le remplissage de l'Explorer en arrière-plan.
   Stream<CachedData<List<PriceBar>>> watchHistory(
     Asset asset, {
     bool forceRefresh = false,
+    RequestPriority priority = RequestPriority.high,
   }) {
     return _sync.watch(
-      _AssetHistory(asset, priceBars: _priceBars, source: _source),
+      _AssetHistory(
+        asset,
+        priceBars: _priceBars,
+        source: _source,
+        priority: priority,
+      ),
       forceRefresh: forceRefresh,
     );
   }
 }
 
 class _AssetHistory implements SyncedSeries<PriceBar> {
-  _AssetHistory(this.asset, {required this.priceBars, required this.source});
+  _AssetHistory(
+    this.asset, {
+    required this.priceBars,
+    required this.source,
+    required this.priority,
+  });
 
   final Asset asset;
   final PriceBarDao priceBars;
   final PriceSource source;
+  final RequestPriority priority;
 
   @override
   String get resourceKey => 'asset:${asset.id}';
@@ -70,7 +84,7 @@ class _AssetHistory implements SyncedSeries<PriceBar> {
 
   @override
   Future<List<PriceBar>> download({required DateTime since}) =>
-      source.fetchDailyBars(asset, since: since);
+      source.fetchDailyBars(asset, since: since, priority: priority);
 
   @override
   Future<void> save(List<PriceBar> items) =>

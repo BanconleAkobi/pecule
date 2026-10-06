@@ -2,6 +2,7 @@ import 'package:pecule/core/clock.dart';
 import 'package:pecule/data/remote/coingecko_client.dart';
 import 'package:pecule/data/remote/dto/coingecko_dto.dart';
 import 'package:pecule/data/remote/dto/twelve_data_dto.dart';
+import 'package:pecule/data/remote/request_throttle.dart';
 import 'package:pecule/data/remote/twelve_data_client.dart';
 import 'package:pecule/domain/models/asset.dart';
 import 'package:pecule/domain/models/asset_type.dart';
@@ -9,7 +10,11 @@ import 'package:pecule/domain/models/price_bar.dart';
 
 abstract interface class PriceSource {
   /// Cours quotidiens de [asset] à partir de [since] inclus.
-  Future<List<PriceBar>> fetchDailyBars(Asset asset, {required DateTime since});
+  Future<List<PriceBar>> fetchDailyBars(
+    Asset asset, {
+    required DateTime since,
+    required RequestPriority priority,
+  });
 }
 
 /// L'identifiant d'un actif du catalogue est celui de son fournisseur :
@@ -17,24 +22,29 @@ abstract interface class PriceSource {
 class RemotePriceSource implements PriceSource {
   RemotePriceSource({
     required this._twelveData,
+    required this._twelveDataThrottle,
     required this._coinGecko,
     required this._clock,
   });
 
   final TwelveDataClient _twelveData;
+  final RequestThrottle _twelveDataThrottle;
   final CoinGeckoClient _coinGecko;
   final Clock _clock;
 
+  /// Seules les requêtes Twelve Data passent par la file d'attente : c'est le
+  /// quota serré (8 par minute). [priority] est ignorée pour CoinGecko.
   @override
   Future<List<PriceBar>> fetchDailyBars(
     Asset asset, {
     required DateTime since,
+    required RequestPriority priority,
   }) async {
     switch (asset.type) {
       case AssetType.stock || AssetType.etf:
-        final bars = await _twelveData.fetchDailyBars(
-          asset.id,
-          startDay: since,
+        final bars = await _twelveDataThrottle.run(
+          () => _twelveData.fetchDailyBars(asset.id, startDay: since),
+          priority: priority,
         );
         return bars.map(_fromTwelveData).toList();
       case AssetType.crypto:
