@@ -1,0 +1,260 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 13px; fill: #1B1E17; }
+    .page-title { font-size: 22px; font-weight: 700; }
+    .page-sub { font-size: 13px; fill: #5C6152; }
+    .box { fill: #FFFFFF; stroke: #1B1E17; stroke-width: 1.5; }
+    .user { fill: #EEF3B0; stroke: #1B1E17; stroke-width: 1.5; }
+    .ref { fill: #D6E8FF; stroke: #1B1E17; stroke-width: 1.5; }
+    .cache { fill: #FBDDF1; stroke: #1B1E17; stroke-width: 1.5; }
+    .ent-title { font-size: 14px; font-weight: 700; text-anchor: middle; }
+    .id { text-decoration: underline; font-weight: 600; }
+    .link { stroke: #1B1E17; stroke-width: 1.3; fill: none; }
+    .assoc { fill: #FFFFFF; stroke: #1B1E17; stroke-width: 1.5; }
+    .assoc-name { font-size: 12px; font-weight: 700; text-anchor: middle; }
+    .assoc-attr { font-size: 12px; font-style: italic; text-anchor: middle; }
+    .card { font-size: 12px; font-weight: 700; fill: #8A2D12; }
+    .note { font-size: 12px; font-style: italic; fill: #5C6152; text-anchor: middle; }
+    .legend { font-size: 13px; }
+  </style>
+
+  <rect width="1600" height="1200" fill="#FFFFFF"/>
+  <text x="40" y="38" class="page-title">Pécule · Modèle conceptuel des données</text>
+  <text x="40" y="60" class="page-sub">Notation Merise · identifiants soulignés · cardinalités lues depuis l'entité vers l'association</text>
+
+  <g transform="translate(0,60)">
+
+    <!-- Links, drawn first so shapes sit on top -->
+    <line class="link" x1="155" y1="120" x2="155" y2="400"/>
+    <polyline class="link" points="230,400 330,270 470,154"/>
+    <line class="link" x1="610" y1="97" x2="820" y2="97"/>
+    <polyline class="link" points="270,425 560,300 820,180"/>
+    <line class="link" x1="270" y1="475" x2="820" y2="475"/>
+    <line class="link" x1="935" y1="208" x2="935" y2="400"/>
+    <polyline class="link" points="1020,400 1145,304 1330,208"/>
+    <line class="link" x1="1050" y1="478" x2="1260" y2="478"/>
+    <polyline class="link" points="230,514 230,640 400,700"/>
+    <polyline class="link" points="860,532 740,724 630,724"/>
+    <polyline class="link" points="100,514 100,880 400,946"/>
+    <polyline class="link" points="940,532 900,946 630,946"/>
+    <polyline class="link" points="1040,532 1120,770 1260,928"/>
+    <line class="link" x1="1310" y1="526" x2="1310" y2="660"/>
+    <line class="link" x1="1440" y1="526" x2="1440" y2="660"/>
+    <polyline class="link" points="1490,470 1530,800 1490,928"/>
+
+    <!-- PRÉFÉRENCE -->
+    <rect class="box" x="40" y="40" width="230" height="80"/>
+    <rect class="user" x="40" y="40" width="230" height="28"/>
+    <text x="155" y="59" class="ent-title">PRÉFÉRENCE</text>
+    <text x="52" y="86" class="id">clé</text>
+    <text x="52" y="104">valeur</text>
+
+    <!-- QUESTION -->
+    <rect class="box" x="380" y="40" width="230" height="114"/>
+    <rect class="ref" x="380" y="40" width="230" height="28"/>
+    <text x="495" y="59" class="ent-title">QUESTION</text>
+    <text x="392" y="86" class="id">numéro</text>
+    <text x="392" y="104">intitulé</text>
+    <text x="392" y="122">propositions</text>
+    <text x="392" y="140">bonne_réponse</text>
+
+    <!-- LEÇON -->
+    <rect class="box" x="820" y="40" width="230" height="168"/>
+    <rect class="ref" x="820" y="40" width="230" height="28"/>
+    <text x="935" y="59" class="ent-title">LEÇON</text>
+    <text x="832" y="86" class="id">id_leçon</text>
+    <text x="832" y="104">numéro</text>
+    <text x="832" y="122">titre</text>
+    <text x="832" y="140">niveau</text>
+    <text x="832" y="158">durée_min</text>
+    <text x="832" y="176">contenu</text>
+    <text x="832" y="194">action</text>
+
+    <!-- COURS JOURNALIER -->
+    <rect class="box" x="1260" y="40" width="230" height="168"/>
+    <rect class="cache" x="1260" y="40" width="230" height="28"/>
+    <text x="1375" y="59" class="ent-title">COURS JOURNALIER</text>
+    <text x="1272" y="86" class="id">jour</text>
+    <text x="1272" y="104">ouverture</text>
+    <text x="1272" y="122">plus_haut</text>
+    <text x="1272" y="140">plus_bas</text>
+    <text x="1272" y="158">clôture</text>
+    <text x="1272" y="176">volume</text>
+    <text x="1272" y="194">capitalisation</text>
+
+    <!-- PROFIL -->
+    <rect class="box" x="40" y="400" width="230" height="114"/>
+    <rect class="user" x="40" y="400" width="230" height="28"/>
+    <text x="155" y="419" class="ent-title">PROFIL</text>
+    <text x="52" y="446" class="id">id_profil</text>
+    <text x="52" y="464">niveau</text>
+    <text x="52" y="482">questionnaire_fait</text>
+    <text x="52" y="500">date_création</text>
+
+    <!-- ACTIF -->
+    <rect class="box" x="820" y="400" width="230" height="132"/>
+    <rect class="ref" x="820" y="400" width="230" height="28"/>
+    <text x="935" y="419" class="ent-title">ACTIF</text>
+    <text x="832" y="446" class="id">id_actif</text>
+    <text x="832" y="464">nom</text>
+    <text x="832" y="482">symbole</text>
+    <text x="832" y="500">type</text>
+    <text x="832" y="518">fournisseur</text>
+
+    <!-- DEVISE -->
+    <rect class="box" x="1260" y="430" width="230" height="96"/>
+    <rect class="ref" x="1260" y="430" width="230" height="28"/>
+    <text x="1375" y="449" class="ent-title">DEVISE</text>
+    <text x="1272" y="476" class="id">code</text>
+    <text x="1272" y="494">nom</text>
+    <text x="1272" y="512">symbole</text>
+
+    <!-- ACHAT FICTIF -->
+    <rect class="box" x="400" y="640" width="230" height="168"/>
+    <rect class="user" x="400" y="640" width="230" height="28"/>
+    <text x="515" y="659" class="ent-title">ACHAT FICTIF</text>
+    <text x="412" y="686" class="id">id_achat</text>
+    <text x="412" y="704">date_exécution</text>
+    <text x="412" y="722">montant_eur</text>
+    <text x="412" y="740">cours_unitaire</text>
+    <text x="412" y="758">taux_eur_usd</text>
+    <text x="412" y="776">quantité</text>
+    <text x="412" y="794">date_création</text>
+
+    <!-- TAUX DE CHANGE -->
+    <rect class="box" x="1260" y="660" width="230" height="78"/>
+    <rect class="cache" x="1260" y="660" width="230" height="28"/>
+    <text x="1375" y="679" class="ent-title">TAUX DE CHANGE</text>
+    <text x="1272" y="706" class="id">jour</text>
+    <text x="1272" y="724">taux</text>
+
+    <!-- SIMULATION -->
+    <rect class="box" x="400" y="880" width="230" height="132"/>
+    <rect class="user" x="400" y="880" width="230" height="28"/>
+    <text x="515" y="899" class="ent-title">SIMULATION</text>
+    <text x="412" y="926" class="id">id_simulation</text>
+    <text x="412" y="944">montant_périodique_eur</text>
+    <text x="412" y="962">fréquence</text>
+    <text x="412" y="980">date_début</text>
+    <text x="412" y="998">date_création</text>
+
+    <!-- SYNCHRONISATION -->
+    <rect class="box" x="1260" y="880" width="230" height="96"/>
+    <rect class="cache" x="1260" y="880" width="230" height="28"/>
+    <text x="1375" y="899" class="ent-title">SYNCHRONISATION</text>
+    <text x="1272" y="926" class="id">clé_ressource</text>
+    <text x="1272" y="944">dernier_jour_reçu</text>
+    <text x="1272" y="962">dernière_récupération</text>
+    <text x="1375" y="998" class="note">XT : suit un actif ou une devise, jamais les deux</text>
+
+    <!-- Associations -->
+    <ellipse class="assoc" cx="155" cy="260" rx="50" ry="20"/>
+    <text x="155" y="264" class="assoc-name">DÉFINIR</text>
+
+    <ellipse class="assoc" cx="330" cy="270" rx="62" ry="20"/>
+    <text x="330" y="274" class="assoc-name">SE TROMPER</text>
+
+    <ellipse class="assoc" cx="715" cy="97" rx="68" ry="20"/>
+    <text x="715" y="101" class="assoc-name">RENVOYER À</text>
+
+    <ellipse class="assoc" cx="560" cy="300" rx="52" ry="28"/>
+    <text x="560" y="297" class="assoc-name">VOIR</text>
+    <text x="560" y="313" class="assoc-attr">date_vue</text>
+
+    <ellipse class="assoc" cx="545" cy="475" rx="82" ry="28"/>
+    <text x="545" y="472" class="assoc-name">METTRE EN FAVORI</text>
+    <text x="545" y="488" class="assoc-attr">date_ajout</text>
+
+    <ellipse class="assoc" cx="935" cy="304" rx="55" ry="20"/>
+    <text x="935" y="308" class="assoc-name">ILLUSTRER</text>
+
+    <ellipse class="assoc" cx="1145" cy="304" rx="80" ry="20"/>
+    <text x="1145" y="308" class="assoc-name">AVOIR POUR COURS</text>
+
+    <ellipse class="assoc" cx="1155" cy="478" rx="72" ry="20"/>
+    <text x="1155" y="482" class="assoc-name">ÊTRE COTÉ EN</text>
+
+    <ellipse class="assoc" cx="230" cy="640" rx="58" ry="20"/>
+    <text x="230" y="644" class="assoc-name">EFFECTUER</text>
+
+    <ellipse class="assoc" cx="740" cy="724" rx="62" ry="20"/>
+    <text x="740" y="728" class="assoc-name">CONCERNER</text>
+
+    <ellipse class="assoc" cx="100" cy="880" rx="66" ry="20"/>
+    <text x="100" y="884" class="assoc-name">ENREGISTRER</text>
+
+    <ellipse class="assoc" cx="900" cy="946" rx="52" ry="20"/>
+    <text x="900" y="950" class="assoc-name">SIMULER</text>
+
+    <ellipse class="assoc" cx="1120" cy="770" rx="45" ry="20"/>
+    <text x="1120" y="774" class="assoc-name">SUIVRE</text>
+
+    <ellipse class="assoc" cx="1310" cy="593" rx="62" ry="20"/>
+    <text x="1310" y="597" class="assoc-name">DE BASE</text>
+
+    <ellipse class="assoc" cx="1440" cy="593" rx="58" ry="20"/>
+    <text x="1440" y="597" class="assoc-name">COTÉE</text>
+
+    <ellipse class="assoc" cx="1530" cy="800" rx="45" ry="20"/>
+    <text x="1530" y="804" class="assoc-name">SUIVRE</text>
+
+    <!-- Cardinalities -->
+    <text x="163" y="140" class="card">1,1</text>
+    <text x="163" y="392" class="card">0,n</text>
+
+    <text x="238" y="392" class="card">0,n</text>
+    <text x="478" y="174" class="card">0,n</text>
+
+    <text x="614" y="90" class="card">1,1</text>
+    <text x="790" y="90" class="card">0,n</text>
+
+    <text x="284" y="446" class="card">0,n</text>
+    <text x="790" y="204" class="card">0,n</text>
+
+    <text x="278" y="468" class="card">0,n</text>
+    <text x="790" y="468" class="card">0,n</text>
+
+    <text x="942" y="226" class="card">0,n</text>
+    <text x="942" y="394" class="card">0,n</text>
+
+    <text x="994" y="394" class="card">0,n</text>
+    <text x="1338" y="226" class="card">(1,1)</text>
+
+    <text x="1054" y="470" class="card">1,1</text>
+    <text x="1232" y="470" class="card">0,n</text>
+
+    <text x="238" y="532" class="card">0,n</text>
+    <text x="370" y="688" class="card">1,1</text>
+
+    <text x="866" y="552" class="card">0,n</text>
+    <text x="634" y="716" class="card">1,1</text>
+
+    <text x="108" y="532" class="card">0,n</text>
+    <text x="370" y="934" class="card">1,1</text>
+
+    <text x="946" y="552" class="card">0,n</text>
+    <text x="636" y="938" class="card">1,1</text>
+
+    <text x="1052" y="566" class="card">0,1</text>
+    <text x="1224" y="916" class="card">0,1</text>
+
+    <text x="1316" y="546" class="card">0,n</text>
+    <text x="1316" y="652" class="card">(1,1)</text>
+    <text x="1446" y="546" class="card">0,n</text>
+    <text x="1446" y="652" class="card">(1,1)</text>
+
+    <text x="1498" y="492" class="card">0,1</text>
+    <text x="1498" y="952" class="card">0,1</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(40,1110)">
+    <rect class="user" x="0" y="0" width="18" height="18"/>
+    <text x="28" y="14" class="legend">Données de l'utilisateur · en base, jamais effacées automatiquement</text>
+    <rect class="ref" x="520" y="0" width="18" height="18"/>
+    <text x="548" y="14" class="legend">Référentiel · écrit dans le code ou le JSON des leçons</text>
+    <rect class="cache" x="940" y="0" width="18" height="18"/>
+    <text x="968" y="14" class="legend">Cache · en base, vidable à tout moment</text>
+    <text x="0" y="48" class="legend">0,n : zéro à plusieurs · 1,1 : exactement un · 0,1 : zéro ou un · (1,1) : identifiant relatif, l'entité s'identifie avec celle d'en face</text>
+  </g>
+</svg>

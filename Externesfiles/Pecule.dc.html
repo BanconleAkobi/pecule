@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E8E5D8;-webkit-font-smoothing:antialiased}
+a{color:#1B1E17}a:hover{color:#5a6312}
+*::-webkit-scrollbar{display:none}
+input,select,button{font:inherit}
+input::placeholder{color:#6E7466}
+@keyframes pc-draw{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+@keyframes pc-in{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pc-up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes pc-fade{from{opacity:0}to{opacity:1}}
+@keyframes pc-pulse{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes pc-pop{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
+@keyframes pc-rise{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-wrap:wrap;gap:56px;justify-content:center;align-items:flex-start;padding:48px 28px 64px;font-family:'Schibsted Grotesk',sans-serif;color:#1B1E17;box-sizing:border-box">
+
+  <aside style="flex:0 1 270px;display:flex;flex-direction:column;gap:22px;padding-top:12px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:26px;height:26px;border-radius:50%;background:#E2F24B;box-shadow:inset 0 0 0 1.5px #1B1E17"></div>
+      <div style="font-family:'Instrument Serif',serif;font-size:38px;font-style:italic;line-height:1">pécule</div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#5C6152">Maquette interactive · iPhone 390 × 844</div>
+    <p style="margin:0;font-size:14px;line-height:1.55;color:#3A3E33;text-wrap:pretty">Tout est cliquable. Utilise la liste pour sauter directement à un écran, ou navigue comme dans l'app.</p>
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#5C6152;margin-bottom:8px">Aller à</div>
+      <sc-for list="{{ jumps }}" as="j" hint-placeholder-count="12">
+        <button onClick="{{ j.go }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;font-size:13.5px;background:{{ j.bg }};color:#1B1E17">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C6152;width:18px">{{ j.n }}</span>{{ j.label }}
+        </button>
+      </sc-for>
+    </div>
+  </aside>
+
+  <div style="flex:none;width:412px;height:866px;border-radius:60px;padding:11px;box-sizing:border-box;background:#050605;box-shadow:0 50px 90px -40px rgba(30,35,20,.55),inset 0 0 0 1.5px #2b3028">
+    <div style="position:relative;width:390px;height:844px;border-radius:49px;overflow:hidden;background:#0E110D;color:#F3F1E7;font-family:'Schibsted Grotesk',sans-serif">
+
+      <div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:0 34px 0 40px;font-size:15px;font-weight:600;pointer-events:none;background:{{ statusBg }}">
+        <span>9:41</span>
+        <div style="position:absolute;left:50%;top:11px;transform:translateX(-50%);width:122px;height:35px;border-radius:20px;background:#000"></div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.02em">{{ netLabel }} ▮</span>
+      </div>
+
+      <sc-if value="{{ isWelcome }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:96px 28px 44px;animation:pc-fade .5s">
+          <div style="position:absolute;right:-90px;top:70px;width:330px;height:330px;border-radius:50%;background:#E2F24B"></div>
+          <div style="position:absolute;right:-90px;top:70px;width:330px;height:330px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding-right:60px;box-sizing:border-box">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#12160A;text-align:center;line-height:1.6;letter-spacing:.04em">0,00 € RISQUÉ<br>100 % FICTIF</div>
+          </div>
+          <div style="position:relative;font-family:'Instrument Serif',serif;font-style:italic;font-size:30px">pécule</div>
+          <div style="flex:1"></div>
+          <h1 style="position:relative;margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:58px;line-height:.98;letter-spacing:-.01em">Ton premier patrimoine, <span style="font-style:italic;color:#E2F24B">sans risque.</span></h1>
+          <p style="margin:20px 0 34px;font-size:16px;line-height:1.5;color:#A3A898;max-width:300px">Des cours réels, de l'argent fictif. Tu apprends en essayant.</p>
+          <button onClick="{{ startQuiz }}" style="all:unset;cursor:pointer;text-align:center;height:58px;line-height:58px;border-radius:29px;background:#E2F24B;color:#12160A;font-weight:600;font-size:17px">C'est parti</button>
+          <button onClick="{{ skipQuiz }}" style="all:unset;cursor:pointer;text-align:center;margin-top:14px;padding:10px;font-size:15px;color:#A3A898">Passer</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:66px 24px 40px">
+          <div style="display:flex;gap:6px">
+            <sc-for list="{{ quizBars }}" as="b" hint-placeholder-count="5">
+              <div style="flex:1;height:4px;border-radius:2px;background:{{ b.bg }};transition:background .3s"></div>
+            </sc-for>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px">
+            <button onClick="{{ quizBack }}" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;background:#171B16;text-align:center;line-height:40px;font-size:18px">←</button>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A3A898;letter-spacing:.06em">QUESTION {{ quizNum }} SUR 5</span>
+            <button onClick="{{ skipQuiz }}" style="all:unset;cursor:pointer;font-size:14px;color:#A3A898;padding:8px 0">Passer</button>
+          </div>
+          <h2 style="margin:40px 0 28px;font-family:'Instrument Serif',serif;font-weight:400;font-size:40px;line-height:1.05;text-wrap:pretty">{{ quizQ }}</h2>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ quizOpts }}" as="o" hint-placeholder-count="4">
+              <button onClick="{{ o.pick }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;min-height:64px;padding:0 18px;border-radius:18px;background:{{ o.bg }};box-shadow:inset 0 0 0 {{ o.bw }} {{ o.bc }};transition:all .2s">
+                <span style="flex:none;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-family:'JetBrains Mono',monospace;font-size:12px;background:{{ o.kbg }};color:{{ o.kc }}">{{ o.k }}</span>
+                <span style="font-size:16px;line-height:1.3">{{ o.t }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="flex:1"></div>
+          <button onClick="{{ quizNext }}" style="all:unset;cursor:pointer;text-align:center;height:58px;line-height:58px;border-radius:29px;font-weight:600;font-size:17px;background:{{ quizBtnBg }};color:{{ quizBtnC }}">{{ quizBtnLabel }}</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isResult }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:100px 26px 40px;animation:pc-fade .5s">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;color:#A3A898">TON POINT DE DÉPART</div>
+          <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:92px;line-height:1;color:#E2F24B;margin:14px 0 6px;animation:pc-rise .7s">{{ level }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A3A898">{{ scoreLine }}</div>
+          <p style="margin:22px 0 34px;font-size:17px;line-height:1.5;text-wrap:pretty">Ce n'est pas une note. Ça sert juste à choisir tes premières leçons.</p>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#A3A898;margin-bottom:10px">À LIRE EN PREMIER</div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid #2D332B">
+            <sc-for list="{{ recoLessons }}" as="l" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid #2D332B">
+                <span style="font-family:'Instrument Serif',serif;font-size:26px;color:#E2F24B;width:34px">{{ l.n }}</span>
+                <span style="flex:1;font-size:16px">{{ l.title }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A3A898">{{ l.min }} min</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="flex:1"></div>
+          <button onClick="{{ enterApp }}" style="all:unset;cursor:pointer;text-align:center;height:58px;line-height:58px;border-radius:29px;background:#E2F24B;color:#12160A;font-weight:600;font-size:17px">Découvrir Pécule</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:84px;overflow-y:auto;padding-top:54px">
+          <sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}">
+            <div style="margin:4px 16px 0;padding:10px 14px;border-radius:12px;background:#20251F;display:flex;align-items:center;gap:10px;font-size:13px;color:#F3F1E7">
+              <span style="width:8px;height:8px;border-radius:50%;background:#FF8A73;flex:none"></span>Hors connexion · données du 4 oct. à 18:02
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabPat }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:14px 20px 28px;animation:pc-fade .3s">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:26px">pécule</div>
+                <button onClick="{{ openSettings }}" style="all:unset;cursor:pointer;font-size:13px;color:#A3A898;padding:8px 14px;border-radius:18px;background:#171B16">Réglages</button>
+              </div>
+              <sc-if value="{{ hasPositions }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#A3A898">TON PATRIMOINE FICTIF</div>
+                <div style="font-family:'Instrument Serif',serif;font-size:62px;line-height:1.05;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-.01em">{{ totalDisplay }}</div>
+                <button onClick="{{ explainPerf }}" style="all:unset;cursor:pointer;display:inline-flex;gap:10px;align-items:baseline;margin-top:6px;font-size:16px;font-weight:600;color:{{ gainColor }};border-bottom:1.5px dotted {{ gainColor }};padding-bottom:2px">{{ gainLine }}</button>
+                <div style="margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898">Mis à jour le 4 oct. à 18:02 · touche le chiffre pour le traduire</div>
+
+                <div style="margin-top:28px;padding:20px;border-radius:20px;background:#171B16;display:flex;align-items:center;gap:22px">
+                  <svg width="124" height="124" viewBox="0 0 124 124" style="flex:none;transform:rotate(-90deg)">
+                    <circle cx="62" cy="62" r="46" style="fill:none;stroke:#20251F;stroke-width:16"></circle>
+                    <circle cx="62" cy="62" r="46" style="fill:none;stroke:#E2F24B;stroke-width:16;stroke-dasharray:{{ seg0.dash }};stroke-dashoffset:{{ seg0.off }};transition:stroke-dasharray .9s"></circle>
+                    <circle cx="62" cy="62" r="46" style="fill:none;stroke:#8EC5FF;stroke-width:16;stroke-dasharray:{{ seg1.dash }};stroke-dashoffset:{{ seg1.off }};transition:stroke-dasharray .9s"></circle>
+                    <circle cx="62" cy="62" r="46" style="fill:none;stroke:#F0A3D9;stroke-width:16;stroke-dasharray:{{ seg2.dash }};stroke-dashoffset:{{ seg2.off }};transition:stroke-dasharray .9s"></circle>
+                  </svg>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+                    <sc-for list="{{ legend }}" as="g" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:center;gap:10px;font-size:14px">
+                        <span style="width:10px;height:10px;border-radius:3px;background:{{ g.c }}"></span>
+                        <span style="flex:1;color:#A3A898">{{ g.label }}</span>
+                        <span style="font-weight:600;font-variant-numeric:tabular-nums">{{ g.pct }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div style="margin-top:12px;padding:16px 18px;border-radius:18px;display:flex;gap:14px;align-items:flex-start;background:{{ advice.bg }}">
+                  <span style="flex:none;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-family:'Instrument Serif',serif;font-style:italic;font-size:17px;background:{{ advice.dot }};color:#12160A">i</span>
+                  <div style="font-size:14.5px;line-height:1.45">
+                    {{ advice.text }}
+                    <sc-if value="{{ advice.warn }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ openDiversif }}" style="all:unset;cursor:pointer;display:block;margin-top:6px;color:#E2F24B;font-weight:600">Voir la leçon sur la diversification →</button>
+                    </sc-if>
+                  </div>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin:34px 0 6px">
+                  <div style="font-family:'Instrument Serif',serif;font-size:28px">Mes positions</div>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898">{{ posCount }}</span>
+                </div>
+                <sc-for list="{{ positions }}" as="p" hint-placeholder-count="5">
+                  <button onClick="{{ p.open }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #20251F;width:100%;box-sizing:border-box">
+                    <span style="flex:none;width:42px;height:42px;border-radius:50%;text-align:center;line-height:42px;font-size:12px;font-weight:700;background:{{ p.cbg }};color:{{ p.c }}">{{ p.ini }}</span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font-size:15.5px;font-weight:600">{{ p.name }}</span>
+                      <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898;margin-top:3px">{{ p.qty }}</span>
+                    </span>
+                    <span style="text-align:right">
+                      <span style="display:block;font-size:15.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ p.value }}</span>
+                      <span style="display:block;font-size:13px;margin-top:3px;font-variant-numeric:tabular-nums;color:{{ p.pc }}">{{ p.perf }}</span>
+                    </span>
+                  </button>
+                </sc-for>
+                <button onClick="{{ goExplorer }}" style="all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;text-align:center;margin-top:22px;height:50px;line-height:50px;border-radius:25px;box-shadow:inset 0 0 0 1px #2D332B;font-size:15px;font-weight:600">Acheter un autre actif</button>
+              </sc-if>
+              <sc-if value="{{ noPositions }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:70px">
+                  <div style="width:210px;height:210px;border-radius:50%;border:1.5px dashed #4A5245;display:flex;align-items:center;justify-content:center">
+                    <div style="width:120px;height:120px;border-radius:50%;background:#171B16;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:30px">0,00 €</div>
+                  </div>
+                  <div style="font-family:'Instrument Serif',serif;font-size:38px;margin-top:34px;line-height:1.05">Ton patrimoine<br><span style="font-style:italic;color:#E2F24B">commence ici.</span></div>
+                  <p style="margin:14px 0 30px;font-size:15px;line-height:1.5;color:#A3A898;max-width:280px">Choisis un premier actif et achète-le avec de l'argent fictif.</p>
+                  <button onClick="{{ goExplorer }}" style="all:unset;cursor:pointer;padding:0 30px;height:54px;line-height:54px;border-radius:27px;background:#E2F24B;color:#12160A;font-weight:600;font-size:16px">Explorer les actifs</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabExp }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 20px 28px;animation:pc-fade .3s">
+              <div style="font-family:'Instrument Serif',serif;font-size:44px;line-height:1.1">Explorer</div>
+              <div style="margin-top:16px;display:flex;align-items:center;gap:10px;height:50px;padding:0 16px;border-radius:25px;background:#171B16">
+                <span style="width:13px;height:13px;border-radius:50%;border:2px solid #A3A898;flex:none"></span>
+                <input value="{{ search }}" onChange="{{ onSearch }}" placeholder="Nom ou symbole" style="all:unset;flex:1;font-size:15.5px;color:#F3F1E7"></input>
+                <sc-if value="{{ hasSearch }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ clearSearch }}" style="all:unset;cursor:pointer;width:24px;height:24px;border-radius:50%;background:#2D332B;text-align:center;line-height:24px;font-size:13px">✕</button>
+                </sc-if>
+              </div>
+              <div style="display:flex;gap:8px;margin:14px -20px 0;padding:0 20px;overflow-x:auto">
+                <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+                  <button onClick="{{ c.pick }}" style="all:unset;cursor:pointer;flex:none;height:36px;line-height:36px;padding:0 16px;border-radius:18px;font-size:14px;font-weight:500;background:{{ c.bg }};color:{{ c.color }};box-shadow:inset 0 0 0 1px {{ c.bc }}">{{ c.label }}</button>
+                </sc-for>
+              </div>
+              <div style="margin:22px 0 4px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898;letter-spacing:.04em">{{ listMeta }}</div>
+              <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+                <sc-for list="{{ skel }}" as="k" hint-placeholder-count="6">
+                  <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #20251F;animation:pc-pulse 1.4s infinite">
+                    <div style="width:42px;height:42px;border-radius:50%;background:#20251F"></div>
+                    <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div style="width:55%;height:12px;border-radius:6px;background:#20251F"></div><div style="width:30%;height:9px;border-radius:5px;background:#20251F"></div></div>
+                    <div style="width:64px;height:12px;border-radius:6px;background:#20251F"></div>
+                  </div>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ showList }}" hint-placeholder-val="{{ true }}">
+                <sc-for list="{{ assetList }}" as="a" hint-placeholder-count="8">
+                  <div onClick="{{ a.open }}" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #20251F">
+                    <span style="flex:none;width:42px;height:42px;border-radius:50%;text-align:center;line-height:42px;font-size:12px;font-weight:700;background:{{ a.cbg }};color:{{ a.c }}">{{ a.ini }}</span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font-size:15.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.name }}</span>
+                      <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898;margin-top:3px">{{ a.sym }} · {{ a.type }}</span>
+                    </span>
+                    <span style="text-align:right">
+                      <span style="display:block;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums">{{ a.price }}</span>
+                      <span style="display:block;font-size:13px;margin-top:3px;font-variant-numeric:tabular-nums;color:{{ a.pc }}">{{ a.perf }}</span>
+                    </span>
+                    <button onClick="{{ a.fav }}" style="all:unset;cursor:pointer;width:36px;height:44px;text-align:center;line-height:44px;font-size:19px;color:{{ a.hc }};animation:{{ a.anim }}">{{ a.heart }}</button>
+                  </div>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ noResult }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;padding:56px 10px">
+                  <div style="font-family:'Instrument Serif',serif;font-size:30px">Aucun résultat</div>
+                  <p style="margin:10px 0 22px;font-size:15px;color:#A3A898">Rien ne correspond à « {{ search }} ».</p>
+                  <button onClick="{{ clearSearch }}" style="all:unset;cursor:pointer;padding:0 22px;height:44px;line-height:44px;border-radius:22px;box-shadow:inset 0 0 0 1px #2D332B;font-weight:600;font-size:14.5px">Effacer la recherche</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noFav }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;padding:56px 10px">
+                  <div style="font-size:40px;color:#E2F24B">♡</div>
+                  <div style="font-family:'Instrument Serif',serif;font-size:30px;margin-top:6px">Pas encore de favori</div>
+                  <p style="margin:10px auto 0;font-size:15px;color:#A3A898;max-width:260px;line-height:1.5">Touche le cœur d'un actif pour le retrouver ici.</p>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabApp }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 20px 28px;animation:pc-fade .3s">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-family:'Instrument Serif',serif;font-size:44px;line-height:1.1">Ton parcours</div>
+                <span style="padding:6px 12px;border-radius:14px;background:#E2F24B;color:#12160A;font-size:13px;font-weight:600">{{ level }}</span>
+              </div>
+              <div style="margin-top:16px;height:6px;border-radius:3px;background:#20251F;overflow:hidden"><div style="height:100%;border-radius:3px;background:#6EE7A8;width:{{ progressPct }};transition:width .6s"></div></div>
+              <div style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898">{{ progressLabel }}</div>
+              <div style="margin:30px 0 12px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#A3A898">POUR TOI</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <sc-for list="{{ forYou }}" as="l" hint-placeholder-count="2">
+                  <button onClick="{{ l.open }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;min-height:176px;padding:16px;border-radius:20px;box-sizing:border-box;background:{{ l.bg }};color:{{ l.fg }}">
+                    <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:1">{{ l.n }}</span>
+                    <span>
+                      <span style="display:block;font-size:16.5px;font-weight:600;line-height:1.25">{{ l.title }}</span>
+                      <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:8px;opacity:.75">{{ l.min }} MIN · {{ l.levelUp }}</span>
+                    </span>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="margin:32px 0 4px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#A3A898">TOUTES LES LEÇONS</div>
+              <sc-for list="{{ lessons }}" as="l" hint-placeholder-count="8">
+                <button onClick="{{ l.open }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid #20251F;width:100%;box-sizing:border-box">
+                  <span style="font-family:'Instrument Serif',serif;font-size:22px;color:#A3A898;width:30px">{{ l.n }}</span>
+                  <span style="flex:1">
+                    <span style="display:block;font-size:15.5px;font-weight:500">{{ l.title }}</span>
+                    <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898;margin-top:4px">{{ l.level }} · {{ l.min }} min</span>
+                  </span>
+                  <span style="width:26px;height:26px;border-radius:50%;text-align:center;line-height:26px;font-size:13px;font-weight:700;background:{{ l.cbg }};color:#0E110D;box-shadow:inset 0 0 0 1.5px {{ l.cbc }}">{{ l.check }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabSim }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 20px 28px;animation:pc-fade .3s">
+              <sc-if value="{{ simForm }}" hint-placeholder-val="{{ true }}">
+                <div style="font-family:'Instrument Serif',serif;font-size:44px;line-height:1.02">Et si j'avais<br><span style="font-style:italic;color:#E2F24B">investi… ?</span></div>
+                <div style="margin-top:26px;font-size:14px;font-weight:600">Actif</div>
+                <div style="display:flex;gap:8px;margin:10px -20px 0;padding:0 20px;overflow-x:auto">
+                  <sc-for list="{{ simAssets }}" as="a" hint-placeholder-count="6">
+                    <button onClick="{{ a.pick }}" style="all:unset;cursor:pointer;flex:none;display:flex;align-items:center;gap:8px;height:46px;padding:0 14px 0 6px;border-radius:23px;background:#171B16;box-shadow:inset 0 0 0 {{ a.bw }} {{ a.bc }}">
+                      <span style="width:34px;height:34px;border-radius:50%;text-align:center;line-height:34px;font-size:11px;font-weight:700;background:{{ a.cbg }};color:{{ a.c }}">{{ a.ini }}</span>
+                      <span style="font-size:14px;font-weight:500">{{ a.name }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ simErrAsset }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px;font-size:13px;color:#FF8A73">Choisis un actif</div></sc-if>
+                <div style="margin-top:22px;font-size:14px;font-weight:600">Montant à chaque fois</div>
+                <div style="margin-top:10px;display:flex;align-items:center;height:56px;padding:0 18px;border-radius:16px;background:#171B16;box-shadow:inset 0 0 0 1.5px {{ simAmtBorder }}">
+                  <input value="{{ simAmount }}" onChange="{{ onSimAmount }}" inputmode="decimal" style="all:unset;flex:1;font-family:'Instrument Serif',serif;font-size:30px;color:#F3F1E7"></input>
+                  <span style="font-family:'Instrument Serif',serif;font-size:26px;color:#A3A898">€</span>
+                </div>
+                <sc-if value="{{ simErrAmt }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px;font-size:13px;color:#FF8A73">Entre 1 € et 10 000 €</div></sc-if>
+                <div style="margin-top:22px;font-size:14px;font-weight:600">Fréquence</div>
+                <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:16px;background:#171B16">
+                  <sc-for list="{{ freqs }}" as="f" hint-placeholder-count="2">
+                    <button onClick="{{ f.pick }}" style="all:unset;cursor:pointer;text-align:center;height:42px;line-height:42px;border-radius:12px;font-size:14.5px;font-weight:600;background:{{ f.bg }};color:{{ f.c }};transition:background .2s">{{ f.label }}</button>
+                  </sc-for>
+                </div>
+                <div style="margin-top:22px;font-size:14px;font-weight:600">À partir de</div>
+                <div style="margin-top:10px;position:relative;height:52px;border-radius:16px;background:#171B16">
+                  <select value="{{ simStart }}" onChange="{{ onSimStart }}" style="all:unset;position:absolute;inset:0;padding:0 18px;font-size:16px;color:#F3F1E7;cursor:pointer">
+                    <sc-for list="{{ startOpts }}" as="o" hint-placeholder-count="5"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+                  </select>
+                  <span style="position:absolute;right:18px;top:15px;color:#A3A898;pointer-events:none">▾</span>
+                </div>
+                <button onClick="{{ runSim }}" style="all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;text-align:center;margin-top:26px;height:56px;line-height:56px;border-radius:28px;background:#E2F24B;color:#12160A;font-weight:600;font-size:16.5px">Lancer la simulation</button>
+                <div style="margin:36px 0 4px;font-family:'Instrument Serif',serif;font-size:26px">Mes simulations</div>
+                <sc-for list="{{ savedList }}" as="v" hint-placeholder-count="2">
+                  <button onClick="{{ v.open }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #20251F;width:100%;box-sizing:border-box">
+                    <span style="flex:none;width:40px;height:40px;border-radius:50%;text-align:center;line-height:40px;font-size:11px;font-weight:700;background:{{ v.cbg }};color:{{ v.c }}">{{ v.ini }}</span>
+                    <span style="flex:1">
+                      <span style="display:block;font-size:15px;font-weight:600">{{ v.title }}</span>
+                      <span style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898;margin-top:3px">{{ v.sub }}</span>
+                    </span>
+                    <span style="font-size:14px;font-weight:600;color:{{ v.pc }}">{{ v.perf }}</span>
+                  </button>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ simShowResult }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ editSim }}" style="all:unset;cursor:pointer;font-size:14px;color:#A3A898;padding:6px 0">← Modifier</button>
+                <div style="margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A3A898;line-height:1.6">{{ simR.label }}</div>
+                <div style="margin-top:22px;display:flex;flex-direction:column;gap:20px">
+                  <div style="transition:all .6s;opacity:{{ rv1.o }};transform:translateY({{ rv1.y }})">
+                    <div style="font-size:15px;color:#A3A898">Tu aurais investi</div>
+                    <div style="font-family:'Instrument Serif',serif;font-size:40px;line-height:1.1">{{ simR.invested }}</div>
+                  </div>
+                  <div style="transition:all .6s;opacity:{{ rv2.o }};transform:translateY({{ rv2.y }})">
+                    <div style="font-size:15px;color:#A3A898">Ça vaudrait aujourd'hui</div>
+                    <div style="font-family:'Instrument Serif',serif;font-size:64px;line-height:1.02;color:#E2F24B;font-variant-numeric:tabular-nums">{{ simFinalDisplay }}</div>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;transition:all .6s;opacity:{{ rv3.o }};transform:translateY({{ rv3.y }})">
+                    <span style="font-size:30px;font-weight:700;white-space:nowrap;color:{{ simR.pc }}">{{ simR.perf }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A3A898">{{ simR.count }} achats · prix moyen {{ simR.avg }}</span>
+                  </div>
+                </div>
+                <div style="margin-top:24px;padding:18px 14px 12px;border-radius:20px;background:#171B16;transition:opacity .6s;opacity:{{ rv3.o }}">
+                  <svg width="322" height="170" viewBox="0 0 322 170" preserveAspectRatio="none" style="display:block">
+                    <path d="{{ simR.invPath }}" style="fill:none;stroke:#6E7466;stroke-width:1.6"></path>
+                    <path d="{{ simR.valArea }}" style="fill:rgba(226,242,75,.10);stroke:none"></path>
+                    <path d="{{ simR.valPath }}" style="fill:none;stroke:#E2F24B;stroke-width:2.2;stroke-linejoin:round"></path>
+                  </svg>
+                  <div style="display:flex;gap:18px;margin-top:12px;font-size:12.5px;color:#A3A898">
+                    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:#6E7466"></span>Capital investi</span>
+                    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:#E2F24B"></span>Valeur</span>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px">
+                  <button onClick="{{ editSim }}" style="all:unset;cursor:pointer;text-align:center;height:52px;line-height:52px;border-radius:26px;box-shadow:inset 0 0 0 1px #2D332B;font-weight:600;font-size:15px">Modifier</button>
+                  <button onClick="{{ saveSim }}" style="all:unset;cursor:pointer;text-align:center;height:52px;line-height:52px;border-radius:26px;background:#E2F24B;color:#12160A;font-weight:600;font-size:15px">{{ saveLabel }}</button>
+                </div>
+                <p style="margin:16px 0 0;font-size:12.5px;line-height:1.5;color:#A3A898">Calculé sur les cours passés. Ça ne dit rien de l'avenir.</p>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="position:absolute;left:0;right:0;bottom:0;height:84px;background:#0E110D;border-top:1px solid #20251F;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 10px 0;box-sizing:border-box;z-index:5">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ t.go }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;padding-top:6px">
+              <span style="width:{{ t.w }};height:4px;border-radius:2px;background:{{ t.dot }};transition:all .25s"></span>
+              <span style="font-size:12.5px;font-weight:600;color:{{ t.c }}">{{ t.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ showAsset }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;z-index:20;background:#0E110D;animation:pc-in .32s ease-out">
+            <div style="position:absolute;inset:0;overflow-y:auto;padding:54px 0 120px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 20px">
+                <button onClick="{{ closeOverlay }}" style="all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;background:#171B16;text-align:center;line-height:42px;font-size:18px">←</button>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A3A898">{{ ad.sym }} · {{ ad.type }}</span>
+                <button onClick="{{ ad.fav }}" style="all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;background:#171B16;text-align:center;line-height:42px;font-size:19px;color:{{ ad.hc }};animation:{{ ad.anim }}">{{ ad.heart }}</button>
+              </div>
+              <div style="padding:16px 20px 0">
+                <div style="font-size:17px;font-weight:600">{{ ad.name }}</div>
+                <div style="font-family:'Instrument Serif',serif;font-size:56px;line-height:1.08;font-variant-numeric:tabular-nums">{{ chart.price }}</div>
+                <button onClick="{{ explainAsset }}" style="all:unset;cursor:pointer;display:inline-flex;gap:8px;align-items:baseline;font-size:15px">
+                  <span style="font-weight:700;color:{{ chart.pc }};border-bottom:1.5px dotted {{ chart.pc }}">{{ chart.perf }}</span>
+                  <span style="color:#A3A898">{{ chart.label }}</span>
+                </button>
+              </div>
+              <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+                <div style="margin:24px 20px 0;height:200px;border-radius:16px;background:#171B16;animation:pc-pulse 1.4s infinite;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898">Chargement de l'historique…</div>
+              </sc-if>
+              <sc-if value="{{ notLoading }}" hint-placeholder-val="{{ true }}">
+                <div onPointerMove="{{ onScrub }}" onPointerDown="{{ onScrub }}" onPointerLeave="{{ endScrub }}" onPointerUp="{{ endScrub }}" style="position:relative;margin:24px 20px 0;height:200px;touch-action:none;cursor:crosshair">
+                  <svg width="350" height="200" viewBox="0 0 350 200" preserveAspectRatio="none" style="display:block;overflow:visible">
+                    <path d="{{ chart.area }}" style="fill:{{ chart.fill }};stroke:none;animation:pc-fade 1.2s"></path>
+                    <path d="{{ chart.d }}" pathLength="1000" style="fill:none;stroke:{{ chart.stroke }};stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1000;animation:pc-draw 1.2s cubic-bezier(.4,0,.2,1)"></path>
+                  </svg>
+                  <sc-if value="{{ chart.scrubbing }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;top:0;bottom:0;width:1px;background:#4A5245;left:{{ chart.sx }}"></div>
+                    <div style="position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#F3F1E7;box-shadow:0 0 0 4px rgba(243,241,231,.18);left:{{ chart.sx }};top:{{ chart.sy }}"></div>
+                    <div style="position:absolute;top:-30px;transform:translateX(-50%);padding:4px 9px;border-radius:8px;background:#F3F1E7;color:#0E110D;font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap;left:{{ chart.bx }}">{{ chart.date }}</div>
+                  </sc-if>
+                </div>
+              </sc-if>
+              <div style="display:flex;justify-content:space-between;padding:18px 20px 0">
+                <sc-for list="{{ periods }}" as="p" hint-placeholder-count="5">
+                  <button onClick="{{ p.pick }}" style="all:unset;cursor:pointer;width:58px;height:36px;line-height:36px;text-align:center;border-radius:18px;font-size:13.5px;font-weight:600;background:{{ p.bg }};color:{{ p.c }}">{{ p.label }}</button>
+                </sc-for>
+              </div>
+
+              <div style="margin:28px 16px 0;padding:20px;border-radius:20px;background:#171B16">
+                <div style="font-family:'Instrument Serif',serif;font-size:26px">Dollar ou euro ?</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+                  <div style="padding:14px;border-radius:14px;background:#20251F">
+                    <div style="font-size:13px;color:#A3A898">En dollars</div>
+                    <div style="font-size:26px;font-weight:700;margin-top:4px;color:{{ fx.uc }}">{{ fx.usd }}</div>
+                  </div>
+                  <div style="padding:14px;border-radius:14px;background:#20251F;box-shadow:inset 0 0 0 1.5px #E2F24B">
+                    <div style="font-size:13px;color:#A3A898">Pour toi, en euros</div>
+                    <div style="font-size:26px;font-weight:700;margin-top:4px;color:{{ fx.ec }}">{{ fx.eur }}</div>
+                  </div>
+                </div>
+                <p style="margin:14px 0 0;font-size:14px;line-height:1.5;color:#C9CCBE;text-wrap:pretty">{{ fx.text }}</p>
+              </div>
+
+              <div style="margin:12px 16px 0;padding:20px;border-radius:20px;background:#171B16">
+                <div style="display:flex;justify-content:space-between;align-items:baseline">
+                  <div style="font-family:'Instrument Serif',serif;font-size:26px">Score de stabilité</div>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898">1 AN</span>
+                </div>
+                <div style="position:relative;width:220px;height:124px;margin:18px auto 0">
+                  <svg width="220" height="124" viewBox="0 0 220 124" style="display:block">
+                    <path d="M 20 110 A 90 90 0 0 1 200 110" style="fill:none;stroke:#20251F;stroke-width:16;stroke-linecap:round"></path>
+                    <path d="M 20 110 A 90 90 0 0 1 200 110" style="fill:none;stroke:{{ score.c }};stroke-width:16;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:{{ score.off }};transition:stroke-dashoffset 1.3s cubic-bezier(.3,.7,.2,1)"></path>
+                  </svg>
+                  <div style="position:absolute;left:0;right:0;bottom:0;text-align:center">
+                    <div style="font-family:'Instrument Serif',serif;font-size:50px;line-height:1">{{ score.v }}<span style="font-size:20px;color:#A3A898">/100</span></div>
+                    <div style="font-size:15px;font-weight:700;color:{{ score.c }}">{{ score.label }}</div>
+                  </div>
+                </div>
+                <button onClick="{{ toggleScore }}" style="all:unset;cursor:pointer;display:block;margin:16px auto 0;font-size:14px;font-weight:600;color:#E2F24B">{{ score.toggle }}</button>
+                <sc-if value="{{ scoreOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:16px;display:flex;flex-direction:column;gap:14px;animation:pc-fade .3s">
+                    <sc-for list="{{ score.subs }}" as="u" hint-placeholder-count="2">
+                      <div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px"><span>{{ u.label }} <span style="color:#A3A898">· {{ u.raw }}</span></span><span style="font-weight:700">{{ u.note }}</span></div>
+                        <div style="margin-top:7px;height:6px;border-radius:3px;background:#20251F"><div style="height:100%;border-radius:3px;background:#F3F1E7;width:{{ u.w }}"></div></div>
+                      </div>
+                    </sc-for>
+                    <p style="margin:0;font-size:13.5px;line-height:1.5;color:#C9CCBE">On note séparément les variations du prix et sa pire chute. Le score est la moyenne des deux : plus un actif bouge et chute, plus il baisse.</p>
+                  </div>
+                </sc-if>
+                <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#A3A898;text-align:center">Basé sur le passé, ce n'est pas une prédiction.</div>
+              </div>
+
+              <div style="margin:28px 20px 8px;font-family:'Instrument Serif',serif;font-size:26px">Ça veut dire quoi ?</div>
+              <div style="margin:0 16px;display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ cards }}" as="c" hint-placeholder-count="3">
+                  <div style="border-radius:16px;background:#171B16;overflow:hidden">
+                    <button onClick="{{ c.toggle }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;width:100%;box-sizing:border-box;padding:16px 18px;font-size:15px;font-weight:600">{{ c.title }}<span style="font-size:20px;color:#E2F24B;transition:transform .25s;transform:rotate({{ c.rot }})">+</span></button>
+                    <sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+                      <p style="margin:0;padding:0 18px 18px;font-size:14.5px;line-height:1.55;color:#C9CCBE;animation:pc-fade .3s">{{ c.text }}</p>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:28px 20px 34px;background:linear-gradient(to top,#0E110D 62%,rgba(14,17,13,0))">
+              <button onClick="{{ openBuy }}" style="all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;text-align:center;height:56px;line-height:56px;border-radius:28px;background:#E2F24B;color:#12160A;font-weight:600;font-size:16.5px">Ajouter à mon portefeuille</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showLesson }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;z-index:20;background:#0E110D;animation:pc-in .32s ease-out">
+            <div style="position:absolute;inset:0;overflow-y:auto;padding:54px 0 120px">
+              <div style="padding:6px 20px"><button onClick="{{ closeOverlay }}" style="all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;background:#171B16;text-align:center;line-height:42px;font-size:18px">←</button></div>
+              <div style="padding:22px 22px 0">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#A3A898">LEÇON {{ ls.n }} · {{ ls.min }} MIN · {{ ls.levelUp }}</div>
+                <h2 style="margin:12px 0 0;font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:1.02;text-wrap:pretty">{{ ls.title }}</h2>
+                <sc-for list="{{ ls.body }}" as="para" hint-placeholder-count="2">
+                  <p style="margin:20px 0 0;font-size:16.5px;line-height:1.6;color:#DCDDD2;text-wrap:pretty">{{ para }}</p>
+                </sc-for>
+              </div>
+              <sc-if value="{{ ls.hasVol }}" hint-placeholder-val="{{ false }}">
+                <div style="margin:26px 16px 0;padding:18px 14px 14px;border-radius:20px;background:#171B16">
+                  <svg width="330" height="150" viewBox="0 0 330 150" preserveAspectRatio="none" style="display:block">
+                    <path d="{{ volCalm }}" pathLength="1000" style="fill:none;stroke:#6EE7A8;stroke-width:2;stroke-dasharray:1000;animation:pc-draw 1.2s"></path>
+                    <path d="{{ volWild }}" pathLength="1000" style="fill:none;stroke:#FF8A73;stroke-width:2;stroke-dasharray:1000;animation:pc-draw 1.5s"></path>
+                  </svg>
+                  <div style="display:flex;gap:18px;margin-top:12px;font-size:12.5px;color:#A3A898">
+                    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:#6EE7A8"></span>Coca-Cola · calme</span>
+                    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:#FF8A73"></span>Tesla · agitée</span>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ls.hasSlider }}" hint-placeholder-val="{{ false }}">
+                <div style="margin:26px 16px 0;padding:20px;border-radius:20px;background:#171B16">
+                  <div style="font-size:14px;color:#A3A898">1 000 € à 5 % par an pendant <span style="color:#F3F1E7;font-weight:700">{{ years }} ans</span></div>
+                  <div style="font-family:'Instrument Serif',serif;font-size:52px;line-height:1.1;color:#E2F24B;margin-top:6px;font-variant-numeric:tabular-nums">{{ compound }}</div>
+                  <input type="range" min="1" max="30" value="{{ years }}" onChange="{{ onYears }}" style="width:100%;margin-top:14px;accent-color:#E2F24B"></input>
+                </div>
+              </sc-if>
+            </div>
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:28px 20px 34px;background:linear-gradient(to top,#0E110D 62%,rgba(14,17,13,0))">
+              <button onClick="{{ ls.cta }}" style="all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;text-align:center;height:56px;line-height:56px;border-radius:28px;background:#E2F24B;color:#12160A;font-weight:600;font-size:16px">{{ ls.ctaLabel }}</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showBuy }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ closeBuy }}" style="position:absolute;inset:0;z-index:30;background:rgba(0,0,0,.55);animation:pc-fade .25s"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;z-index:31;border-radius:28px 28px 0 0;background:#171B16;padding:12px 20px 34px;animation:pc-up .35s cubic-bezier(.2,.8,.2,1)">
+            <div style="width:40px;height:5px;border-radius:3px;background:#2D332B;margin:0 auto"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:16px">
+              <div style="font-family:'Instrument Serif',serif;font-size:28px">Achat fictif : {{ ad.name }}</div>
+              <button onClick="{{ closeBuy }}" style="all:unset;cursor:pointer;font-size:14px;color:#A3A898">Fermer</button>
+            </div>
+            <div style="margin-top:18px;display:flex;align-items:baseline;justify-content:center;gap:6px;padding:18px 0;border-radius:18px;background:#0E110D;box-shadow:inset 0 0 0 1.5px {{ buy.amtBorder }}">
+              <input value="{{ buyAmount }}" onChange="{{ onBuyAmount }}" inputmode="decimal" placeholder="0" style="all:unset;width:180px;text-align:right;font-family:'Instrument Serif',serif;font-size:58px;line-height:1;color:#F3F1E7"></input>
+              <span style="font-family:'Instrument Serif',serif;font-size:40px;color:#A3A898;width:120px">€</span>
+            </div>
+            <sc-if value="{{ buy.amtErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px;font-size:13.5px;color:#FF8A73;text-align:center">{{ buy.amtMsg }}</div></sc-if>
+            <div style="margin-top:16px;font-size:14px;font-weight:600">Date d'achat</div>
+            <input type="date" value="{{ buyDate }}" onChange="{{ onBuyDate }}" style="all:unset;display:block;box-sizing:border-box;width:100%;margin-top:8px;height:50px;padding:0 16px;border-radius:14px;background:#0E110D;color:#F3F1E7;font-size:16px;color-scheme:dark;box-shadow:inset 0 0 0 1.5px {{ buy.dateBorder }}"></input>
+            <sc-if value="{{ buy.dateErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:8px;font-size:13.5px;color:#FF8A73">{{ buy.dateMsg }}</div></sc-if>
+            <div style="margin-top:14px;padding:14px 16px;border-radius:14px;background:#20251F;display:flex;flex-direction:column;gap:9px;font-size:14px">
+              <sc-for list="{{ buy.recap }}" as="r" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="color:#A3A898">{{ r.k }}</span><span style="font-weight:600;font-variant-numeric:tabular-nums">{{ r.v }}</span></div>
+              </sc-for>
+              <sc-if value="{{ buy.hasNote }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#E2F24B">{{ buy.note }}</div></sc-if>
+            </div>
+            <div style="margin-top:12px;font-size:12.5px;color:#A3A898;text-align:center">Aucun argent réel n'est utilisé.</div>
+            <button onClick="{{ confirmBuy }}" style="all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;text-align:center;margin-top:14px;height:56px;line-height:56px;border-radius:28px;font-weight:600;font-size:16.5px;background:{{ buy.btnBg }};color:{{ buy.btnC }}">Valider l'achat</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showExplain }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ closeExplain }}" style="position:absolute;inset:0;z-index:30;background:rgba(0,0,0,.55);animation:pc-fade .25s"></div>
+          <div style="position:absolute;left:12px;right:12px;bottom:24px;z-index:31;border-radius:26px;background:#E2F24B;color:#12160A;padding:22px 22px 20px;animation:pc-up .35s cubic-bezier(.2,.8,.2,1)">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em">EN CLAIR</div>
+            <div style="font-family:'Instrument Serif',serif;font-size:34px;line-height:1.05;margin-top:8px">{{ explain.title }}</div>
+            <p style="margin:12px 0 18px;font-size:15.5px;line-height:1.5;text-wrap:pretty">{{ explain.text }}</p>
+            <button onClick="{{ closeExplain }}" style="all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;text-align:center;height:48px;line-height:48px;border-radius:24px;background:#12160A;color:#E2F24B;font-weight:600;font-size:15px">Compris</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showSettings }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ closeSettings }}" style="position:absolute;inset:0;z-index:30;background:rgba(0,0,0,.55);animation:pc-fade .25s"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;z-index:31;border-radius:28px 28px 0 0;background:#171B16;padding:12px 20px 34px;animation:pc-up .35s cubic-bezier(.2,.8,.2,1)">
+            <div style="width:40px;height:5px;border-radius:3px;background:#2D332B;margin:0 auto"></div>
+            <div style="font-family:'Instrument Serif',serif;font-size:30px;margin:16px 0 8px">Réglages</div>
+            <sc-for list="{{ settings }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.go }}" style="all:unset;cursor:pointer;display:block;width:100%;box-sizing:border-box;padding:15px 0;border-bottom:1px solid #20251F">
+                <span style="display:block;font-size:15.5px;font-weight:600;color:{{ o.c }}">{{ o.label }}</span>
+                <span style="display:block;font-size:13px;color:#A3A898;margin-top:3px">{{ o.sub }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:50%;bottom:104px;transform:translateX(-50%);z-index:70;padding:12px 18px;border-radius:22px;background:#F3F1E7;color:#0E110D;font-size:14px;font-weight:600;white-space:nowrap;animation:pc-rise .3s">{{ toast }}</div>
+      </sc-if>
+      <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:#F3F1E7;opacity:.85;z-index:80;pointer-events:none"></div>
+    </div>
+  </div>
+
+  <aside style="flex:0 1 270px;display:flex;flex-direction:column;gap:22px;padding-top:12px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#5C6152">Système visuel</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <sc-for list="{{ palette }}" as="c" hint-placeholder-count="10">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="flex:none;width:30px;height:30px;border-radius:8px;background:{{ c.hex }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></span>
+          <span style="display:flex;flex-direction:column;font-size:12px;line-height:1.25"><span>{{ c.name }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5C6152">{{ c.hex }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid rgba(27,30,23,.15)">
+      <div style="font-family:'Instrument Serif',serif;font-size:32px;line-height:1.1;padding-top:10px">Instrument Serif</div>
+      <div style="font-size:12px;color:#5C6152">Gros chiffres et titres. La voix « éditoriale » de Pécule.</div>
+      <div style="font-size:18px;font-weight:600;padding-top:6px">Schibsted Grotesk</div>
+      <div style="font-size:12px;color:#5C6152">Interface, boutons, listes. Chiffres tabulaires.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:14px;padding-top:6px">JetBrains Mono</div>
+      <div style="font-size:12px;color:#5C6152">Dates, symboles, métadonnées.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid rgba(27,30,23,.15);font-size:13px;line-height:1.5;color:#3A3E33">
+      <div><b>Jaune « pollen »</b> réservé aux actions principales et au chiffre clé. Jamais pour un gain ou une perte.</div>
+      <div><b>Chiffres traduisibles</b> : un chiffre souligné en pointillés s'ouvre en phrase simple.</div>
+      <div><b>Gain / perte</b> toujours avec signe et flèche, pas seulement la couleur.</div>
+    </div>
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startAt&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;onboarding&quot;,&quot;app&quot;],&quot;default&quot;:&quot;onboarding&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;dataState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;normal&quot;,&quot;chargement&quot;,&quot;hors-ligne&quot;],&quot;default&quot;:&quot;normal&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;emptyPortfolio&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  static A = [
+    {id:'AAPL',name:'Apple',sym:'AAPL',type:'Action',price:214.30,p1:0.126,vol:0.20,dd:-0.25},
+    {id:'MSFT',name:'Microsoft',sym:'MSFT',type:'Action',price:389.10,p1:0.094,vol:0.22,dd:-0.18},
+    {id:'NVDA',name:'Nvidia',sym:'NVDA',type:'Action',price:158.40,p1:0.412,vol:0.48,dd:-0.33},
+    {id:'TSLA',name:'Tesla',sym:'TSLA',type:'Action',price:372.80,p1:0.287,vol:0.62,dd:-0.48},
+    {id:'KO',name:'Coca-Cola',sym:'KO',type:'Action',price:61.20,p1:0.041,vol:0.15,dd:-0.11},
+    {id:'SPY',name:'SPDR S&P 500',sym:'SPY',type:'ETF',price:571.90,p1:0.142,vol:0.16,dd:-0.14},
+    {id:'QQQ',name:'Invesco Nasdaq 100',sym:'QQQ',type:'ETF',price:498.60,p1:0.168,vol:0.21,dd:-0.19},
+    {id:'VT',name:'Vanguard Total World',sym:'VT',type:'ETF',price:118.40,p1:0.118,vol:0.14,dd:-0.12},
+    {id:'BND',name:'Vanguard Total Bond',sym:'BND',type:'ETF',price:63.10,p1:-0.012,vol:0.06,dd:-0.05},
+    {id:'GLD',name:'SPDR Gold',sym:'GLD',type:'ETF',price:302.50,p1:0.334,vol:0.15,dd:-0.09},
+    {id:'bitcoin',name:'Bitcoin',sym:'BTC',type:'Crypto',price:96420,p1:0.612,vol:0.52,dd:-0.31},
+    {id:'ethereum',name:'Ethereum',sym:'ETH',type:'Crypto',price:3870,p1:0.218,vol:0.68,dd:-0.45},
+    {id:'solana',name:'Solana',sym:'SOL',type:'Crypto',price:182.40,p1:-0.084,vol:0.82,dd:-0.58},
+    {id:'dogecoin',name:'Dogecoin',sym:'DOGE',type:'Crypto',price:0.21,p1:-0.152,vol:0.95,dd:-0.66}
+  ];
+  static TC = {Action:'#8EC5FF',ETF:'#E2F24B',Crypto:'#F0A3D9'};
+  static L = [
+    {id:'actions',n:'01',title:'Actions, ETF et cryptos',level:'Découverte',min:3,body:["Une action, c'est un petit morceau d'une seule entreprise. Si Apple va bien, ton morceau prend de la valeur.","Un ETF, c'est un panier qui contient des centaines d'actions d'un coup. Une crypto, c'est une monnaie numérique, sans entreprise derrière."],cta:['asset','SPY'],ctaLabel:'Comparer avec le S&P 500'},
+    {id:'rendement',n:'02',title:'Rendement et performance',level:'Découverte',min:2,body:["« +18 % sur un an » veut dire : 100 € placés il y a un an valent 118 € aujourd'hui.","Attention : +50 % puis −50 %, ça ne fait pas zéro. Tu finis à −25 %, car la baisse s'applique à un montant plus grand."],cta:['asset','AAPL'],ctaLabel:'Voir la performance d\u2019Apple'},
+    {id:'composes',n:'03',title:'Les intérêts composés',level:'Découverte',min:3,body:["Tes gains produisent eux-mêmes des gains. Plus tu attends, plus l'effet grossit.","Fais glisser le curseur pour voir ce que deviennent 1 000 €."],slider:true,cta:['sim','SPY'],ctaLabel:'Lancer une simulation'},
+    {id:'dca',n:'04',title:'Le DCA',level:'Découverte',min:2,body:["Le DCA, c'est investir la même somme à intervalle régulier, par exemple 50 € chaque mois.","Tu achètes plus quand c'est bas, moins quand c'est haut, sans avoir à deviner le bon moment."],cta:['sim','SPY'],ctaLabel:'Simuler 50 € par mois depuis 2022'},
+    {id:'diversification',n:'05',title:'La diversification',level:'Initié',min:3,body:["Diversifier, c'est ne pas tout miser sur un seul actif. Si l'un chute, les autres amortissent.","Ton anneau de répartition te montre d'un coup d'œil si tu dépends trop d'une seule ligne."],cta:['pat'],ctaLabel:'Voir mon anneau'},
+    {id:'volatilite',n:'06',title:'La volatilité',level:'Initié',min:3,body:["La volatilité mesure à quel point un prix bouge. Une courbe calme monte ou descend doucement. Une courbe agitée fait des montagnes russes.","Plus c'est agité, plus tu risques de vendre au mauvais moment."],vol:true,cta:['asset','TSLA'],ctaLabel:'Voir le score de Tesla'},
+    {id:'drawdown',n:'07',title:'La plus forte baisse',level:'Initié',min:2,body:["C'est la pire chute entre un sommet et le creux qui suit. Elle répond à la question : combien aurais-je perdu en achetant au pire moment ?","Repère-la sur une courbe : cherche le point le plus haut, puis le plus bas juste après."],cta:['asset','ethereum'],ctaLabel:'Repérer la baisse sur Ethereum'},
+    {id:'change',n:'08',title:"L'effet de change",level:"À l'aise",min:3,body:["Une action américaine est cotée en dollars. Toi, tu comptes en euros.","Si l'euro monte face au dollar, tes gains en dollars valent moins une fois convertis. C'est l'effet de change."],cta:['asset','AAPL'],ctaLabel:'Voir Apple en dollars et en euros'}
+  ];
+  static Q = [
+    {q:"Qu'est-ce qu'un ETF ?",o:["Une action d'une seule entreprise","Un panier d'actifs qui suit un indice","Une cryptomonnaie","Un compte épargne"],a:1,l:'actions'},
+    {q:"Un actif fait +50 %, puis −50 %. Où en es-tu ?",o:["Au même point","À −25 %","À +25 %","À −50 %"],a:1,l:'rendement'},
+    {q:"La volatilité, c'est…",o:["Le gain moyen par an","L'ampleur des variations du prix","Les frais de la plateforme","La taille d'une entreprise"],a:1,l:'volatilite'},
+    {q:"Pourquoi diversifier son portefeuille ?",o:["Pour gagner plus à coup sûr","Pour ne pas dépendre d'un seul actif","Pour payer moins d'impôts","Pour suivre la mode"],a:1,l:'diversification'},
+    {q:"Investir 50 € chaque mois, ça s'appelle…",o:["Le trading","Le DCA","Le levier","Le staking"],a:1,l:'dca'}
+  ];
+  static N = 1300;
+
+  state = {
+    route: (this.props.startAt ?? 'onboarding') === 'app' ? 'app' : 'welcome',
+    qi: 0, answers: [null,null,null,null,null],
+    level: 'Initié', mistakes: ['diversification','volatilite'],
+    tab: 'pat', overlay: null, assetId: 'AAPL', period: '1A', scrub: null,
+    scoreOpen: false, gaugeOn: false, openCards: {}, sheet: null, explain: null,
+    buyAmount: '150', buyDate: '2026-01-04',
+    lessonId: 'volatilite', seen: {actions:true, rendement:true, composes:true}, years: 10,
+    favs: {AAPL:true, bitcoin:true}, search: '', filter: 'Tous', bump: null,
+    holdings: [{id:'VT',value:1210.40,inv:1059.89},{id:'SPY',value:705.00,inv:592.93},{id:'AAPL',value:642.90,inv:570.96},{id:'MSFT',value:401.50,inv:368.01},{id:'bitcoin',value:522.37,inv:408.21}],
+    empty: null, countT: 1,
+    sim: {asset:null, amount:'50', freq:'mois', start:'2022-01'}, simTried: false, simCfg: null, simStep: 0, simT: 1, simSaved: false,
+    saved: [{asset:'bitcoin',amount:'50',freq:'mois',start:'2022-01'},{asset:'SPY',amount:'20',freq:'semaine',start:'2024-01'}],
+    toast: null
+  };
+
+  componentDidMount(){ if (this.state.route==='app') this.tween('countT', 1300); }
+  componentWillUnmount(){ Object.values(this._tw||{}).forEach(clearInterval); clearTimeout(this._tt); (this._st||[]).forEach(clearTimeout); }
+
+  tween(key, ms){
+    this._tw = this._tw || {};
+    clearInterval(this._tw[key]);
+    const t0 = Date.now(); this.setState({[key]:0});
+    this._tw[key] = setInterval(() => { const t = Math.min(1,(Date.now()-t0)/ms); this.setState({[key]:t}); if (t>=1) clearInterval(this._tw[key]); }, 16);
+  }
+  showToast(t){ clearTimeout(this._tt); this.setState({toast:t}); this._tt = setTimeout(()=>this.setState({toast:null}),2200); }
+
+  dates(){
+    if (this._d) return this._d;
+    const out=[]; const d=new Date(2026,9,2);
+    while(out.length<Component.N){ const w=d.getDay(); if(w!==0&&w!==6) out.unshift(new Date(d)); d.setDate(d.getDate()-1); }
+    return this._d=out;
+  }
+  series(id){
+    this._s = this._s || {};
+    if (this._s[id]) return this._s[id];
+    const a=this.asset(id), N=Component.N;
+    let seed=0; for (const ch of id) seed=(seed*31+ch.charCodeAt(0))>>>0;
+    const rnd=()=>{seed=(seed*1664525+1013904223)>>>0; return seed/4294967296;};
+    const sd=a.vol/Math.sqrt(252)*Math.sqrt(3);
+    const w=[0]; for(let i=1;i<N;i++) w.push(w[i-1]+(rnd()-.5)*2*sd);
+    const pMax=Math.pow(1+a.p1,3.2)-1;
+    const i1=N-253, a0=Math.log(a.price/(1+pMax)), a1=Math.log(a.price/(1+a.p1)), a2=Math.log(a.price);
+    const c0=a0-w[0], c1=a1-w[i1], c2=a2-w[N-1];
+    const v=w.map((x,i)=> i<=i1 ? Math.exp(x+c0+(c1-c0)*i/i1) : Math.exp(x+c1+(c2-c1)*(i-i1)/(N-1-i1)));
+    return this._s[id]=v;
+  }
+  asset(id){ return Component.A.find(a=>a.id===id); }
+  rate(i){ return Math.max(1.0, 1.10-0.05*(Component.N-1-i)/252); }
+  eur(v,price){ const d=price&&v<1?3:2; return v.toLocaleString('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:d,maximumFractionDigits:d}); }
+  eur0(v){ return Math.round(v).toLocaleString('fr-FR')+' €'; }
+  pct(p,d=1){ return (p>=0?'+':'−')+Math.abs(p*100).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d})+' %'; }
+  arrow(p){ return (p>=0?'▲ ':'▼ ')+this.pct(p); }
+  pc(p){ return p>=0?'#6EE7A8':'#FF8A73'; }
+  ini(a){ return a.sym.slice(0,a.sym.length>3?3:a.sym.length); }
+  fdate(d,opt){ return d.toLocaleDateString('fr-FR',opt||{day:'numeric',month:'short',year:'numeric'}); }
+  path(vals,W,H,pad=8,min,max){
+    const lo=min??Math.min(...vals), hi=max??Math.max(...vals), r=(hi-lo)||1;
+    const pts=vals.map((v,i)=>[i/(vals.length-1)*W, pad+(H-2*pad)*(1-(v-lo)/r)]);
+    const d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L');
+    return {d, area:d+` L${W} ${H} L0 ${H} Z`, pts};
+  }
+
+  openAsset(id){
+    this.setState({overlay:'asset',assetId:id,period:'1A',scrub:null,scoreOpen:false,gaugeOn:false,openCards:{},sheet:null,explain:null});
+    clearTimeout(this._gt); this._gt=setTimeout(()=>this.setState({gaugeOn:true}),450);
+  }
+  openLesson(id){ this.setState(s=>({overlay:'lesson',lessonId:id,seen:{...s.seen,[id]:true},sheet:null})); }
+  goTab(t){ this.setState({route:'app',tab:t,overlay:null,sheet:null,explain:null}); if(t==='pat') this.tween('countT',1300); }
+  toggleFav(id){
+    const on=!this.state.favs[id];
+    this.setState(s=>({favs:{...s.favs,[id]:on},bump:id}));
+    setTimeout(()=>this.setState({bump:null}),450);
+    this.showToast(on?'Ajouté à tes favoris':'Retiré de tes favoris');
+  }
+  levelFrom(score){ return score<=1?'Découverte':score<=3?'Initié':"À l'aise"; }
+  forYouIds(){
+    const s=this.state;
+    if (s.level==='Découverte') return ['actions','rendement','composes','dca'].filter(x=>!s.seen[x]).concat(['actions','rendement']).slice(0,2);
+    if (s.level==="À l'aise") return ['change','drawdown'];
+    const m=s.mistakes.length?s.mistakes:['diversification','volatilite'];
+    return m.concat(['diversification','volatilite']).filter((x,i,a)=>a.indexOf(x)===i).slice(0,2);
+  }
+  computeSim(cfg){
+    const a=this.asset(cfg.asset), v=this.series(cfg.asset), D=this.dates(), N=Component.N;
+    const amt=parseFloat(String(cfg.amount).replace(',','.'));
+    const [y,m]=cfg.start.split('-').map(Number); const sd=new Date(y,m-1,1);
+    let i0=D.findIndex(d=>d>=sd); if(i0<0) i0=0;
+    const step=cfg.freq==='mois'?21:5;
+    let qty=0, inv=0, count=0; const invS=[], valS=[];
+    for(let i=i0;i<N;i++){
+      if((i-i0)%step===0){ qty+=amt/v[i]; inv+=amt; count++; }
+      if((i-i0)%3===0||i===N-1){ invS.push(inv); valS.push(qty*v[i]); }
+    }
+    const final=qty*v[N-1], perf=final/inv-1, hi=Math.max(...valS,...invS);
+    const W=322,H=170;
+    const ip=this.path(invS,W,H,6,0,hi), vp=this.path(valS,W,H,6,0,hi);
+    let stairs='M'+ip.pts[0][0]+' '+ip.pts[0][1];
+    for(let k=1;k<ip.pts.length;k++){ stairs+=` L${ip.pts[k][0].toFixed(1)} ${ip.pts[k-1][1].toFixed(1)} L${ip.pts[k][0].toFixed(1)} ${ip.pts[k][1].toFixed(1)}`; }
+    const months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+    return {a,final,inv,perf,count,
+      invested:this.eur0(inv), perfTxt:this.arrow(perf), pc:this.pc(perf), avg:this.eur(inv/qty),
+      label:`${amt.toLocaleString('fr-FR')} € chaque ${cfg.freq} · ${a.name} · depuis ${months[m-1]} ${y}`,
+      invPath:stairs, valPath:vp.d, valArea:vp.area};
+  }
+  runSimWith(cfg){
+    (this._st||[]).forEach(clearTimeout);
+    this.setState({simCfg:cfg,simStep:0,simSaved:false,simT:0});
+    this._st=[setTimeout(()=>this.setState({simStep:1}),120),setTimeout(()=>{this.setState({simStep:2});this.tween('simT',1100);},800),setTimeout(()=>this.setState({simStep:3}),2000)];
+  }
+  simValid(sim){
+    const amt=parseFloat(String(sim.amount).replace(',','.'));
+    return {assetOk:!!sim.asset, amtOk: !isNaN(amt)&&amt>=1&&amt<=10000};
+  }
+  buyCheck(){
+    const s=this.state, D=this.dates(), N=Component.N;
+    const raw=String(s.buyAmount).trim().replace(',','.');
+    const amt=parseFloat(raw);
+    let amtMsg=null;
+    if(raw===''||isNaN(amt)||amt<=0) amtMsg='Indique un montant supérieur à 0 €';
+    else if(amt>1000000) amtMsg='Le montant maximum est 1 000 000 €';
+    else if(/\.\d{3,}/.test(raw)) amtMsg='Deux décimales maximum';
+    let dateMsg=null, idx=-1, note=null;
+    const p=s.buyDate.split('-').map(Number);
+    const d=s.buyDate?new Date(p[0],p[1]-1,p[2]):null;
+    if(!d||isNaN(d)) dateMsg='Choisis une date';
+    else if(d>new Date(2026,9,5)) dateMsg='La date ne peut pas être dans le futur';
+    else if(d<D[0]) dateMsg='Pas de cours disponible à cette date';
+    else {
+      for(let i=N-1;i>=0;i--){ if(D[i]<=d){ idx=i; break; } }
+      if(D[idx].getTime()!==d.getTime()) note='Cours du '+this.fdate(D[idx],{weekday:'long',day:'numeric',month:'long'})+' utilisé';
+    }
+    return {amt,amtMsg,dateMsg,idx,note,ok:!amtMsg&&!dateMsg};
+  }
+
+  renderVals(){
+    const s=this.state, P=this.props, C=Component, D=this.dates(), N=C.N;
+    const ds=P.dataState??'normal', offline=ds==='hors-ligne', loading=ds==='chargement';
+    const empty=s.empty??(P.emptyPortfolio??false);
+    const TC=C.TC, tint=c=>c+'24';
+    const lessonById=id=>C.L.find(l=>l.id===id);
+
+    // positions
+    const holds=empty?[]:s.holdings;
+    const total=holds.reduce((t,h)=>t+h.value,0), invested=holds.reduce((t,h)=>t+h.inv,0);
+    const gain=total-invested, perf=invested?gain/invested:0;
+    const byType={ETF:0,Action:0,Crypto:0}; holds.forEach(h=>byType[this.asset(h.id).type]+=h.value);
+    const Ci=2*Math.PI*46; let cum=0;
+    const seg=t=>{ const w=total?byType[t]/total:0; const o={dash:`${Math.max(0,w*Ci-(w>0&&w<1?3:0)).toFixed(1)} ${Ci.toFixed(1)}`,off:(-cum*Ci).toFixed(1)}; cum+=w; return o; };
+    const seg0=seg('ETF'), seg1=seg('Action'), seg2=seg('Crypto');
+    const legend=[['ETF','ETF'],['Actions','Action'],['Cryptos','Crypto']].map(([l,t])=>({label:l,c:TC[t],pct:Math.round(total?byType[t]/total*100:0)+' %'}));
+    const top=holds.slice().sort((a,b)=>b.value-a.value)[0];
+    const types=Object.values(byType).filter(v=>v>0).length;
+    let advice={warn:false,bg:'#171B16',dot:'#6EE7A8',text:`Ton patrimoine est bien réparti entre ${types} types d'actifs.`};
+    if(top&&top.value/total>0.5) advice={warn:true,bg:'#2A2418',dot:'#E2F24B',text:`Ton patrimoine dépend à ${Math.round(top.value/total*100)} % de ${this.asset(top.id).name}.`};
+    const positions=holds.slice().sort((a,b)=>b.value-a.value).map(h=>{const a=this.asset(h.id), p=h.value/h.inv-1; return {name:a.name,ini:this.ini(a),c:TC[a.type],cbg:tint(TC[a.type]),qty:(h.value/a.price).toLocaleString('fr-FR',{maximumFractionDigits:4})+' '+a.sym,value:this.eur(h.value),perf:this.arrow(p),pc:this.pc(p),open:()=>this.openAsset(a.id)};});
+    const ease=t=>1-Math.pow(1-t,3);
+
+    // explorer
+    const q=s.search.trim().toLowerCase();
+    const fmap={Tous:null,Actions:'Action',ETF:'ETF',Cryptos:'Crypto'};
+    let list=C.A.filter(a=>!q||a.name.toLowerCase().includes(q)||a.sym.toLowerCase().includes(q));
+    if(s.filter==='Favoris') list=list.filter(a=>s.favs[a.id]); else if(fmap[s.filter]) list=list.filter(a=>a.type===fmap[s.filter]);
+    const assetList=list.map(a=>({name:a.name,sym:a.sym,type:a.type,ini:this.ini(a),c:TC[a.type],cbg:tint(TC[a.type]),price:this.eur(a.price,true),perf:this.arrow(a.p1),pc:this.pc(a.p1),heart:s.favs[a.id]?'♥':'♡',hc:s.favs[a.id]?'#E2F24B':'#6E7466',anim:s.bump===a.id?'pc-pop .45s':'none',open:()=>this.openAsset(a.id),fav:(e)=>{e.stopPropagation();this.toggleFav(a.id);}}));
+    const noFav=!loading&&s.filter==='Favoris'&&list.length===0&&!q;
+    const noResult=!loading&&list.length===0&&!noFav;
+    const chips=['Tous','Actions','ETF','Cryptos','Favoris'].map(l=>{const on=s.filter===l; return {label:l==='Favoris'?'♥ Favoris':l,bg:on?'#F3F1E7':'transparent',color:on?'#0E110D':'#F3F1E7',bc:on?'#F3F1E7':'#2D332B',pick:()=>this.setState({filter:l})};});
+
+    // asset detail
+    const a=this.asset(s.assetId), v=this.series(a.id);
+    const plen={'1M':22,'6M':126,'1A':253,'3A':756,'Max':N}[s.period];
+    const slice=v.slice(N-plen), stepN=Math.max(1,Math.ceil(plen/140));
+    const idxs=[]; for(let i=0;i<plen;i+=stepN) idxs.push(i); if(idxs[idxs.length-1]!==plen-1) idxs.push(plen-1);
+    const samp=idxs.map(i=>slice[i]);
+    this._len=samp.length;
+    const cp=this.path(samp,350,200,10);
+    const si=s.scrub==null?null:Math.min(s.scrub,samp.length-1);
+    const cur=si==null?samp[samp.length-1]:samp[si], chg=cur/samp[0]-1;
+    const plabel={'1M':'sur 1 mois','6M':'sur 6 mois','1A':'sur 1 an','3A':'sur 3 ans','Max':'depuis le début'}[s.period];
+    const up=samp[samp.length-1]>=samp[0];
+    const chart={d:cp.d,area:cp.area,stroke:up?'#6EE7A8':'#FF8A73',fill:up?'rgba(110,231,168,.08)':'rgba(255,138,115,.08)',price:this.eur(cur,true),perf:this.arrow(chg),pc:this.pc(chg),
+      label:si==null?plabel:'au '+this.fdate(D[N-plen+idxs[si]]),scrubbing:si!=null,
+      sx:si==null?'0px':cp.pts[si][0]+'px',sy:si==null?'0px':cp.pts[si][1]+'px',bx:si==null?'0px':Math.min(300,Math.max(50,cp.pts[si][0]))+'px',
+      date:si==null?'':this.fdate(D[N-plen+idxs[si]])+' · '+this.eur(cur,true)};
+    const periods=['1M','6M','1A','3A','Max'].map(p=>({label:p,bg:s.period===p?'#20251F':'transparent',c:s.period===p?'#F3F1E7':'#A3A898',pick:()=>this.setState({period:p,scrub:null})}));
+    const usd=(1+a.p1)*1.10/1.05-1, fxPts=Math.abs((a.p1-usd)*100).toLocaleString('fr-FR',{maximumFractionDigits:1});
+    const fx={usd:this.arrow(usd),eur:this.arrow(a.p1),uc:this.pc(usd),ec:this.pc(a.p1),text:`En un an, l'euro est passé de 1,05 $ à 1,10 $. Tes dollars valent donc moins d'euros : ${fxPts} points de moins pour toi.`};
+    const nv=100*(1-Math.min(a.vol,.8)/.8), nb=100*(1-Math.min(Math.abs(a.dd),.8)/.8), sc=Math.round(.5*nv+.5*nb);
+    const slabel=sc>=70?'Stable':sc>=40?'Modéré':'Agité', scol=sc>=70?'#6EE7A8':sc>=40?'#E2F24B':'#FF8A73';
+    const score={v:sc,label:slabel,c:scol,off:(283*(1-(s.gaugeOn?sc/100:0))).toFixed(1),toggle:s.scoreOpen?'Masquer le détail ↑':'Comprendre ce score ↓',
+      subs:[{label:'Volatilité',raw:Math.round(a.vol*100)+' %',note:Math.round(nv),w:nv+'%'},{label:'Plus forte baisse',raw:'−'+Math.round(Math.abs(a.dd)*100)+' %',note:Math.round(nb),w:nb+'%'}]};
+    const typeWord=a.type==='Crypto'?'une crypto':a.type==='ETF'?'un ETF':'une action';
+    const calm=a.vol<0.18?'C\u2019est très calme':a.vol<0.3?'C\u2019est plutôt calme':a.vol<0.55?'C\u2019est assez agité':'C\u2019est très agité';
+    const cards=[
+      {k:'perf',title:'Performance sur 1 an',text:`Si tu avais mis 100 € dans ${a.name} il y a un an, tu aurais aujourd'hui ${(100*(1+a.p1)).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})} €.`},
+      {k:'vol',title:'Volatilité',text:`Sur un an, le cours de ${a.name} s'est éloigné de sa moyenne d'environ ${Math.round(a.vol*100)} %. ${calm} pour ${typeWord}.`},
+      {k:'dd',title:'Plus forte baisse',text:`Au pire moment de l'année, quelqu'un qui avait acheté au plus haut perdait ${Math.round(Math.abs(a.dd)*100)} %.`}
+    ].map(c=>({...c,open:!!s.openCards[c.k],rot:s.openCards[c.k]?'45deg':'0deg',toggle:()=>this.setState(st=>({openCards:{...st.openCards,[c.k]:!st.openCards[c.k]}}))}));
+    const ad={name:a.name,sym:a.sym,type:a.type,heart:s.favs[a.id]?'♥':'♡',hc:s.favs[a.id]?'#E2F24B':'#F3F1E7',anim:s.bump===a.id?'pc-pop .45s':'none',fav:()=>this.toggleFav(a.id)};
+
+    // buy
+    const bc=this.buyCheck(); let recap=[];
+    if(!bc.dateMsg){ const pe=v[bc.idx], r=this.rate(bc.idx);
+      recap=[{k:'Cours à cette date',v:(pe*r).toLocaleString('fr-FR',{style:'currency',currency:'USD'})},{k:'Taux EUR/USD',v:r.toLocaleString('fr-FR',{minimumFractionDigits:4,maximumFractionDigits:4})},{k:'Quantité obtenue',v:bc.amtMsg?'—':(bc.amt/pe).toLocaleString('fr-FR',{maximumFractionDigits:4})+' '+a.sym}]; }
+    else recap=[{k:'Cours à cette date',v:'—'},{k:'Taux EUR/USD',v:'—'},{k:'Quantité obtenue',v:'—'}];
+    const buy={amtErr:!!bc.amtMsg,amtMsg:bc.amtMsg,amtBorder:bc.amtMsg?'#FF8A73':'#2D332B',dateErr:!!bc.dateMsg,dateMsg:bc.dateMsg,dateBorder:bc.dateMsg?'#FF8A73':'transparent',recap,hasNote:!!bc.note&&!bc.dateMsg,note:bc.note,btnBg:bc.ok?'#E2F24B':'#2D332B',btnC:bc.ok?'#12160A':'#6E7466'};
+
+    // learn
+    const ls0=lessonById(s.lessonId);
+    const lCta=()=>{const c=ls0.cta; if(c[0]==='asset') this.openAsset(c[1]); else if(c[0]==='pat') this.goTab('pat'); else { this.setState({sim:{asset:c[1],amount:'50',freq:'mois',start:'2022-01'},simCfg:null}); this.goTab('sim'); }};
+    const ls={...ls0,levelUp:ls0.level.toUpperCase(),hasVol:!!ls0.vol,hasSlider:!!ls0.slider,cta:lCta};
+    const norm=arr=>arr.map(x=>x/arr[0]);
+    const ko=norm(this.series('KO').slice(N-253)), ts=norm(this.series('TSLA').slice(N-253));
+    const lo=Math.min(...ko,...ts), hi=Math.max(...ko,...ts);
+    const volCalm=this.path(ko.filter((_,i)=>i%2===0),330,150,6,lo,hi).d, volWild=this.path(ts.filter((_,i)=>i%2===0),330,150,6,lo,hi).d;
+    const seenN=C.L.filter(l=>s.seen[l.id]).length;
+    const fy=this.forYouIds();
+    const forYou=fy.map((id,i)=>{const l=lessonById(id); return {...l,levelUp:l.level.toUpperCase(),bg:i===0?'#E2F24B':'#20251F',fg:i===0?'#12160A':'#F3F1E7',open:()=>this.openLesson(id)};});
+    const lessons=C.L.map(l=>({...l,check:s.seen[l.id]?'✓':'',cbg:s.seen[l.id]?'#6EE7A8':'transparent',cbc:s.seen[l.id]?'#6EE7A8':'#2D332B',open:()=>this.openLesson(l.id)}));
+
+    // quiz
+    const Q=C.Q[s.qi], picked=s.answers[s.qi];
+    const correct=s.answers.filter((x,i)=>x===C.Q[i].a).length;
+    const recoIds=s.mistakes.concat(fy,['actions','rendement','composes']).filter((x,i,ar)=>ar.indexOf(x)===i).slice(0,3);
+
+    // sim
+    const sv=this.simValid(s.sim);
+    const simR0=s.simCfg?this.computeSim(s.simCfg):null;
+    const rv=n=>({o:s.simStep>=n?1:0,y:s.simStep>=n?'0px':'14px'});
+    const months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+    const savedList=s.saved.map(cfg=>{const r=this.computeSim(cfg); const [y,m]=cfg.start.split('-').map(Number); return {ini:this.ini(r.a),c:TC[r.a.type],cbg:tint(TC[r.a.type]),title:`${cfg.amount} € / ${cfg.freq} · ${r.a.name}`,sub:`DEPUIS ${months[m-1].toUpperCase()} ${y}`,perf:this.arrow(r.perf),pc:r.pc,open:()=>{this.setState({sim:{...cfg}});this.runSimWith(cfg);}};});
+
+    const currentKey = s.route!=='app'?s.route : s.sheet==='buy'?'buy' : s.overlay==='asset'?'asset' : s.overlay==='lesson'?'lesson' : s.tab==='sim'&&s.simCfg?'simres' : s.tab==='pat'&&empty?'patempty' : s.tab;
+    const J=[['welcome','Onboarding · accueil',()=>this.setState({route:'welcome',qi:0})],['quiz','Onboarding · question',()=>this.setState({route:'quiz',qi:1,answers:[1,null,null,null,null]})],['result','Onboarding · résultat',()=>this.setState({route:'result'})],
+      ['pat','Patrimoine',()=>{this.setState({empty:false});this.goTab('pat');}],['patempty','Patrimoine vide',()=>{this.setState({empty:true});this.goTab('pat');}],['exp','Explorer',()=>this.goTab('exp')],
+      ['asset','Fiche actif · Apple',()=>{this.goTab('exp');this.openAsset('AAPL');}],['buy','Achat fictif',()=>{this.goTab('exp');this.openAsset('AAPL');this.setState({sheet:'buy'});}],
+      ['app','Apprendre',()=>this.goTab('app')],['lesson','Leçon · volatilité',()=>{this.goTab('app');this.openLesson('volatilite');}],
+      ['sim','Simulateur',()=>{this.setState({simCfg:null});this.goTab('sim');}],['simres','Résultat simulation',()=>{const cfg={asset:'bitcoin',amount:'50',freq:'mois',start:'2022-01'};this.setState({sim:cfg});this.goTab('sim');this.runSimWith(cfg);}]];
+    const jumps=J.map(([k,label,go],i)=>({n:String(i+1).padStart(2,'0'),label,go,bg:k===currentKey?'rgba(27,30,23,.09)':'transparent'}));
+
+    return {
+      jumps, statusBg: s.overlay?'#0E110D':'transparent', netLabel: offline?'hors ligne':'5G',
+      isWelcome:s.route==='welcome', isQuiz:s.route==='quiz', isResult:s.route==='result', isApp:s.route==='app',
+      startQuiz:()=>this.setState({route:'quiz',qi:0,answers:[null,null,null,null,null]}),
+      skipQuiz:()=>{this.setState({level:'Découverte',mistakes:[]});this.goTab('pat');},
+      quizBars:C.Q.map((_,i)=>({bg:i<=s.qi?'#E2F24B':'#2D332B'})), quizNum:s.qi+1, quizQ:Q.q,
+      quizOpts:Q.o.map((t,i)=>({t,k:'ABCD'[i],bg:picked===i?'#20251F':'#171B16',bw:picked===i?'2px':'1px',bc:picked===i?'#E2F24B':'#2D332B',kbg:picked===i?'#E2F24B':'#20251F',kc:picked===i?'#12160A':'#A3A898',pick:()=>this.setState(st=>{const an=st.answers.slice(); an[st.qi]=i; return {answers:an};})})),
+      quizBack:()=> s.qi===0?this.setState({route:'welcome'}):this.setState({qi:s.qi-1}),
+      quizNext:()=>{ if(picked==null) return; if(s.qi<4) this.setState({qi:s.qi+1}); else { const mk=C.Q.filter((qq,i)=>s.answers[i]!==qq.a).map(qq=>qq.l); this.setState({route:'result',level:this.levelFrom(correct),mistakes:mk}); } },
+      quizBtnLabel:s.qi<4?'Suivant':'Voir mon point de départ', quizBtnBg:picked==null?'#20251F':'#E2F24B', quizBtnC:picked==null?'#6E7466':'#12160A',
+      level:s.level, scoreLine:`${correct} bonne${correct>1?'s':''} réponse${correct>1?'s':''} sur 5`,
+      recoLessons:recoIds.map(id=>lessonById(id)), enterApp:()=>this.goTab('pat'),
+      offline, loading, notLoading:!loading,
+      tabPat:s.tab==='pat', tabExp:s.tab==='exp', tabApp:s.tab==='app', tabSim:s.tab==='sim',
+      openSettings:()=>this.setState({sheet:'settings'}), closeSettings:()=>this.setState({sheet:null}), showSettings:s.sheet==='settings',
+      settings:[{label:'Refaire le questionnaire',sub:'Ton niveau et tes leçons conseillées seront recalculés.',c:'#F3F1E7',go:()=>this.setState({route:'quiz',qi:0,answers:[null,null,null,null,null],sheet:null})},
+        {label:'Vider le cache',sub:'Les cours seront retéléchargés. Tes données restent.',c:'#F3F1E7',go:()=>{this.setState({sheet:null});this.showToast('Cache vidé');}},
+        {label:'Réinitialiser le portefeuille',sub:'Supprime tous tes achats fictifs.',c:'#FF8A73',go:()=>{this.setState({sheet:null,empty:true});this.showToast('Portefeuille réinitialisé');}}],
+      hasPositions:holds.length>0, noPositions:holds.length===0,
+      totalDisplay:this.eur(total*ease(s.countT)), gainLine:`${gain>=0?'+':'−'}${this.eur(Math.abs(gain))}  ${this.arrow(perf)}`, gainColor:this.pc(gain),
+      explainPerf:()=>this.setState({explain:{title:`${this.pct(perf)}, en clair`,text:`Tu as investi ${this.eur(invested)} (fictifs). Aujourd'hui, ça vaut ${this.eur(total)}. Pour chaque 100 € placés, tu as ${gain>=0?'gagné':'perdu'} ${Math.abs(perf*100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})} €.`}}),
+      explainAsset:()=>this.setState({explain:{title:`${this.pct(chg)}, en clair`,text:`Si tu avais mis 100 € dans ${a.name} ${si==null?plabel.replace('sur ','il y a ').replace('depuis le début','au début de l\u2019historique'):'au début de la période'}, tu aurais ${(100*(1+chg)).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})} € ${si==null?'aujourd\u2019hui':'à cette date'}.`}}),
+      showExplain:!!s.explain, explain:s.explain||{title:'',text:''}, closeExplain:()=>this.setState({explain:null}),
+      seg0,seg1,seg2,legend,advice,positions,posCount:`${positions.length} LIGNES`,
+      openDiversif:()=>this.openLesson('diversification'), goExplorer:()=>this.goTab('exp'),
+      search:s.search, hasSearch:s.search.length>0, onSearch:e=>this.setState({search:e.target.value}), clearSearch:()=>this.setState({search:''}),
+      chips, assetList, showList:!loading&&list.length>0, noResult, noFav, skel:[1,2,3,4,5,6],
+      listMeta:loading?'CHARGEMENT DES COURS…':offline?`${list.length} ACTIFS · DERNIERS COURS CONNUS (4 OCT.)`:`${list.length} ACTIFS · VARIATION SUR 1 AN`,
+      showAsset:s.overlay==='asset', closeOverlay:()=>this.setState({overlay:null,scrub:null}),
+      ad, chart, periods, fx, score, scoreOpen:s.scoreOpen, toggleScore:()=>this.setState({scoreOpen:!s.scoreOpen}), cards,
+      onScrub:e=>{ if(e.type==='pointermove'&&e.pointerType!=='mouse'&&e.buttons===0) return; const r=e.currentTarget.getBoundingClientRect(); const f=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)); this.setState({scrub:Math.round(f*(this._len-1))}); },
+      endScrub:()=>this.setState({scrub:null}),
+      openBuy:()=>this.setState({sheet:'buy',buyAmount:'150',buyDate:'2026-01-04'}), closeBuy:()=>this.setState({sheet:null}), showBuy:s.sheet==='buy',
+      buyAmount:s.buyAmount, buyDate:s.buyDate, onBuyAmount:e=>this.setState({buyAmount:e.target.value}), onBuyDate:e=>this.setState({buyDate:e.target.value}), buy,
+      confirmBuy:()=>{ if(!bc.ok) return; this.setState(st=>{const hs=(st.empty?[]:st.holdings).map(h=>({...h})); const h=hs.find(x=>x.id===a.id); if(h){h.value+=bc.amt;h.inv+=bc.amt;} else hs.push({id:a.id,value:bc.amt,inv:bc.amt}); return {holdings:hs,empty:false,sheet:null};}); this.showToast(`${this.eur(bc.amt)} de ${a.name} ajoutés`); },
+      showLesson:s.overlay==='lesson', ls, volCalm, volWild, years:s.years, onYears:e=>this.setState({years:+e.target.value}), compound:this.eur(1000*Math.pow(1.05,s.years)),
+      progressPct:(seenN/8*100)+'%', progressLabel:`${seenN} LEÇON${seenN>1?'S':''} SUR 8`, forYou, lessons,
+      simForm:!s.simCfg, simShowResult:!!s.simCfg,
+      simAssets:['bitcoin','SPY','AAPL','ethereum','QQQ','TSLA'].map(id=>{const x=this.asset(id),on=s.sim.asset===id; return {name:x.name.replace('SPDR ',''),ini:this.ini(x),c:TC[x.type],cbg:tint(TC[x.type]),bw:on?'2px':'1px',bc:on?'#E2F24B':'#2D332B',pick:()=>this.setState(st=>({sim:{...st.sim,asset:id}}))};}),
+      simErrAsset:s.simTried&&!sv.assetOk, simErrAmt:(s.simTried||s.sim.amount!=='')&&!sv.amtOk, simAmtBorder:(s.simTried||s.sim.amount!=='')&&!sv.amtOk?'#FF8A73':'#2D332B',
+      simAmount:s.sim.amount, onSimAmount:e=>{const val=e.target.value; this.setState(st=>({sim:{...st.sim,amount:val}}));},
+      freqs:[['semaine','Chaque semaine'],['mois','Chaque mois']].map(([k,l])=>({label:l,bg:s.sim.freq===k?'#F3F1E7':'transparent',c:s.sim.freq===k?'#0E110D':'#A3A898',pick:()=>this.setState(st=>({sim:{...st.sim,freq:k}}))})),
+      simStart:s.sim.start, onSimStart:e=>{const val=e.target.value; this.setState(st=>({sim:{...st.sim,start:val}}));},
+      startOpts:[['2022-01','janvier 2022'],['2023-01','janvier 2023'],['2024-01','janvier 2024'],['2025-01','janvier 2025'],['2026-01','janvier 2026']].map(([v2,l])=>({v:v2,l})),
+      runSim:()=>{ this.setState({simTried:true}); if(sv.assetOk&&sv.amtOk) this.runSimWith({...s.sim}); },
+      editSim:()=>this.setState({simCfg:null,simStep:0}),
+      simR:simR0?{...simR0,perf:simR0.perfTxt}:{label:'',invested:'',perf:'',pc:'#fff',count:0,avg:'',invPath:'',valPath:'',valArea:''},
+      simFinalDisplay:simR0?this.eur0(simR0.final*ease(s.simT)):'', rv1:rv(1), rv2:rv(2), rv3:rv(3),
+      saveLabel:s.simSaved?'Enregistrée ✓':'Enregistrer',
+      saveSim:()=>{ if(s.simSaved) return; this.setState(st=>({saved:[{...st.simCfg},...st.saved],simSaved:true})); this.showToast('Simulation enregistrée'); },
+      savedList,
+      tabs:[['pat','Patrimoine'],['exp','Explorer'],['app','Apprendre'],['sim','Simulateur']].map(([k,l])=>({label:l,c:s.tab===k?'#F3F1E7':'#6E7466',dot:s.tab===k?'#E2F24B':'transparent',w:s.tab===k?'22px':'4px',go:()=>this.goTab(k)})),
+      hasToast:!!s.toast, toast:s.toast,
+      palette:[['Fond','#0E110D'],['Surface','#171B16'],['Surface haute','#20251F'],['Bordure','#2D332B'],['Texte','#F3F1E7'],['Texte 2','#A3A898'],['Pollen','#E2F24B'],['Gain','#6EE7A8'],['Perte','#FF8A73'],['Actions','#8EC5FF'],['Cryptos','#F0A3D9']].map(([name,hex])=>({name,hex}))
+    };
+  }
+}
+</script>
+</body>
+</html>

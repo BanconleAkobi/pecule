@@ -1,0 +1,50 @@
+name: pecule
+description: "Pécule : ton premier patrimoine, sans risque. Portefeuille fictif sur cours réels."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/instrument_serif/OFL.txt
+    - assets/fonts/schibsted_grotesk/OFL.txt
+    - assets/fonts/jetbrains_mono/OFL.txt
+
+  fonts:
+    - family: InstrumentSerif
+      fonts:
+        - asset: assets/fonts/instrument_serif/InstrumentSerif-Regular.ttf
+        - asset: assets/fonts/instrument_serif/InstrumentSerif-Italic.ttf
+          style: italic
+    - family: SchibstedGrotesk
+      fonts:
+        - asset: assets/fonts/schibsted_grotesk/SchibstedGrotesk-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/schibsted_grotesk/SchibstedGrotesk-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/schibsted_grotesk/SchibstedGrotesk-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/schibsted_grotesk/SchibstedGrotesk-Bold.ttf
+          weight: 700
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/jetbrains_mono/JetBrainsMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/jetbrains_mono/JetBrainsMono-Medium.ttf
+          weight: 500
